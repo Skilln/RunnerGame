@@ -1,7 +1,7 @@
 package com.skilln.game.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.skilln.game.GameScreen;
 
 import java.util.Random;
 
@@ -22,7 +22,7 @@ public class Enemy extends GameObject {
     public void render(SpriteBatch batch) {
         batch.draw(sprite, x, y, width, height);
 
-        y-=(random.nextInt(5)+1);
+        y-=(GameScreen.ySpeed);
     }
 
     @Override

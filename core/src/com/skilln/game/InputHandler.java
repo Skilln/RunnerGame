@@ -12,9 +12,9 @@ public class InputHandler extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
         if(screenX > (Gdx.graphics.getWidth()/2)) {
-            player.xSpeed += 5;
+            player.xSpeed += 8;
         } else {
-            player.xSpeed += -5;
+            player.xSpeed += -8;
         }
 
         return super.touchDown(screenX, screenY, pointer, button);

@@ -6,15 +6,13 @@ import com.skilln.game.Game;
 
 public class Player extends GameObject {
 
-    public float xSpeed, ySpeed;
+    public float xSpeed;
 
     public Player(float x, float y, GameId id) {
         super(x, y, id);
 
         width = 64;
         height = 64;
-
-        ySpeed = 1;
     }
 
     @Override
@@ -23,7 +21,7 @@ public class Player extends GameObject {
 
         x+=xSpeed;
         if(x < 0) x = 0;
-        if(x > Gdx.graphics.getWidth()-width) x = Gdx.graphics.getWidth()-width;
+        if(x > Game.width-width) x = Game.width-width;
 
         update();
     }

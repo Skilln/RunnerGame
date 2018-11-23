@@ -10,11 +10,15 @@ public class Game extends ApplicationAdapter {
 
 	public static boolean live = true;
 
+	public static final int width = 720;
+	public static final int height = 1280;
+
 	private GameScreen screen;
 
 	@Override
 	public void create () {
 		screen = new GameScreen();
+		screen.show();
 	}
 
 	@Override
@@ -27,8 +31,6 @@ public class Game extends ApplicationAdapter {
 		if(!live) {
 			screen.restart();
 		}
-
-
 	}
 	
 	@Override

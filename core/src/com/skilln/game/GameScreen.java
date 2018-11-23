@@ -25,6 +25,8 @@ public class GameScreen implements Screen {
 
     private int y,  y1;
 
+    public static float ySpeed = 4;
+
     public GameScreen() {
         batch = new SpriteBatch();
 
@@ -32,7 +34,8 @@ public class GameScreen implements Screen {
 
         background = new Texture("background.png");
 
-        camera = new OrthographicCamera();
+        camera = new OrthographicCamera(Game.width, Game.height);
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
         Gdx.input.setInputProcessor(input);
 
@@ -47,14 +50,15 @@ public class GameScreen implements Screen {
 
         player = new Player(0,50, GameId.Player);
 
-        player.setX(Gdx.graphics.getWidth()/2-(player.getWidth()/2));
+        player.setX(Game.width/2-(player.getWidth()/2));
+        player.setY(Game.height/2-Game.height/4);
 
         ObjectHandler.addObject(player);
 
         input.player = player;
 
         y = 0;
-        y1 = Gdx.graphics.getHeight();
+        y1 = Game.height;
 
         thread.start();
     }
@@ -84,18 +88,21 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        batch.setProjectionMatrix(camera.combined);
+        camera.update();
+
         batch.begin();
 
-        if(y1 - player.ySpeed <= 0) {
+        if(y1 - ySpeed <= 0) {
             y = 0;
-            y1 = Gdx.graphics.getHeight();
+            y1 = Game.height;
         }
 
-        y-=player.ySpeed;
-        y1-=player.ySpeed;
+        y-=ySpeed;
+        y1-=ySpeed;
 
-        batch.draw(background, 0, y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(background, 0, y1, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(background, 0, y, Game.width, Game.height);
+        batch.draw(background, 0, y1, Game.width, Game.height);
 
         ObjectHandler.render(batch);
 
@@ -109,17 +116,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        thread.stop();
+       System.out.println("!");
     }
 
     @Override
     public void resume() {
-        thread.resume();
+        System.out.println("$");
     }
 
     @Override
     public void hide() {
-
+        System.out.println("#");
     }
 
     @Override

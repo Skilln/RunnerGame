@@ -11,8 +11,8 @@ public class EnemySpawn implements Runnable {
         while(Game.live) {
             final Random random = new Random();
 
-            final int x = random.nextInt(Gdx.graphics.getWidth());
-            final int y = Gdx.graphics.getHeight() + random.nextInt(200);
+            final int x = random.nextInt(Game.width);
+            final int y = Game.height + random.nextInt(200);
 
             Gdx.app.postRunnable(new Runnable() {
                 @Override
