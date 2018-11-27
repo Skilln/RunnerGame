@@ -1,10 +1,12 @@
-package com.skilln.game;
+package com.skilln.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.skilln.game.Game;
+import com.skilln.game.InputHandler;
 import com.skilln.game.objects.EnemySpawn;
 import com.skilln.game.objects.GameId;
 import com.skilln.game.objects.ObjectHandler;
@@ -26,21 +28,6 @@ public class GameScreen implements Screen {
     private int y,  y1;
 
     public static float ySpeed = 4;
-
-    public GameScreen() {
-        batch = new SpriteBatch();
-
-        input = new InputHandler();
-
-        background = new Texture("background.png");
-
-        camera = new OrthographicCamera(Game.width, Game.height);
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-
-        Gdx.input.setInputProcessor(input);
-
-        start();
-    }
 
     public void start() {
 
@@ -83,6 +70,18 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
+        batch = new SpriteBatch();
+
+        input = new InputHandler();
+
+        background = new Texture("background.png");
+
+        camera = new OrthographicCamera(Game.width, Game.height);
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+
+        Gdx.input.setInputProcessor(input);
+
+        start();
     }
 
     @Override

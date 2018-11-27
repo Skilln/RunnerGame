@@ -27,7 +27,7 @@ public abstract class GameObject {
     public abstract void update();
 
     public Rectangle getHitBox() {
-        return new Rectangle(x, y, width-20, height-20);
+        return new Rectangle(x+20, y+20, width-20, height-20);
     }
 
     public float getX() {
