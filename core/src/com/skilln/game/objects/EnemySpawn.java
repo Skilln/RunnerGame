@@ -1,18 +1,17 @@
 package com.skilln.game.objects;
 
 import com.badlogic.gdx.Gdx;
-import com.skilln.game.Game;
+import com.skilln.game.Application;
 
 import java.util.Random;
 
-public class EnemySpawn implements Runnable {
+public class EnemySpawn extends Thread implements Runnable {
 
     public void run() {
-        while(Game.live) {
             final Random random = new Random();
 
-            final int x = random.nextInt(Game.width);
-            final int y = Game.height + random.nextInt(200);
+            final int x = random.nextInt(Application.width);
+            final int y = Application.height + random.nextInt(200);
 
             Gdx.app.postRunnable(new Runnable() {
                 @Override
@@ -26,6 +25,5 @@ public class EnemySpawn implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
     }
 }

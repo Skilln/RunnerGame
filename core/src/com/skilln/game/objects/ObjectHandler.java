@@ -2,6 +2,7 @@ package com.skilln.game.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.skilln.game.Application;
 
 public class ObjectHandler {
 
@@ -48,11 +49,13 @@ public class ObjectHandler {
         objects.clear();
     }
 
+
     public static boolean checkCollision() {
         GameObject player = getPlayer();
 
         for(int i = 1, size = objects.size; i < size; i++) {
             if(objects.get(i).getHitBox().overlaps(player.getHitBox())) {
+                System.out.println("!!");
                 return true;
             }
         }

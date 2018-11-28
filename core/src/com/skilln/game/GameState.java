@@ -2,6 +2,6 @@ package com.skilln.game;
 
 public enum GameState {
 
-    Menu, Game, Pause, GameOver;
+    MENU, GAME, PAUSE, GAMEOVER, APPLICATION_PAUSE;
 
 }

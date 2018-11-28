@@ -22,7 +22,7 @@ public class Enemy extends GameObject {
     public void render(SpriteBatch batch) {
         batch.draw(sprite, x, y, width, height);
 
-        y-=(GameScreen.ySpeed);
+        y-=(Player.ySpeed);
     }
 
     @Override

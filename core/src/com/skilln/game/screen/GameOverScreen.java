@@ -16,12 +16,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.skilln.game.Application;
 import com.skilln.game.GameState;
 
-public class MenuScreen implements Screen {
-
+public class GameOverScreen implements Screen {
     private Stage stage;
 
-    private TextButton startButton;
-    private TextButton exitButton;
+    private TextButton restartButton;
+    private TextButton toMenuButton;
 
     private BitmapFont font;
 
@@ -33,6 +32,9 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+
+        Application.currentState = GameState.MENU;
+
         camera = new OrthographicCamera(Application.width, Application.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
@@ -58,24 +60,38 @@ public class MenuScreen implements Screen {
 
         style.font = font;
 
-        startButton = new TextButton("Start", style);
+        restartButton = new TextButton("Restart", style);
+        toMenuButton = new TextButton("To menu", style);
 
-        startButton.setWidth(400);
-        startButton.setHeight(100);
+        restartButton.setWidth(400);
+        restartButton.setHeight(100);
 
-        startButton.setX(Application.width/2-startButton.getWidth()/2);
-        startButton.setY(Application.height/2-startButton.getHeight()/2);
+        toMenuButton.setWidth(400);
+        toMenuButton.setHeight(100);
 
-        startButton.addListener(new ChangeListener() {
+        restartButton.setX(Application.width/2-restartButton.getWidth()/2);
+        restartButton.setY(Application.height/2-restartButton.getHeight()/2);
+
+        toMenuButton.setX(Application.width/2-restartButton.getWidth()/2);
+        toMenuButton.setY(Application.height/2-restartButton.getHeight()/2-200);
+
+
+        restartButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 ScreenManager.setScreen(GameState.GAME);
-
-                dispose();
             }
         });
 
-        stage.addActor(startButton);
+        toMenuButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ScreenManager.setScreen(GameState.MENU);
+            }
+        });
+
+        stage.addActor(restartButton);
+        stage.addActor(toMenuButton);
 
     }
 
@@ -103,14 +119,11 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-        dispose();
+
     }
 
     @Override
     public void dispose() {
-        skin.dispose();
-        stage.dispose();
-        font.dispose();
-        buttonAtlas.dispose();
+
     }
 }
