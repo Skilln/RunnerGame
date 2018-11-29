@@ -1,8 +1,8 @@
 package com.skilln.game.objects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,6 +13,10 @@ public class Player extends GameObject {
     public float xSpeed;
     public static float ySpeed;
 
+    public boolean start = false;
+
+
+    public float alpha = 0.001f;
     public float distance;
     public int coins;
 
@@ -38,10 +42,7 @@ public class Player extends GameObject {
         animation_right = new Animation<TextureRegion>(0.11f, animation_right_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-
-        System.out.println(animation_up.getAnimationDuration());
-
-        ySpeed = 4;
+        ySpeed = 0;
 
         width = 120;
         height = 170;
@@ -53,15 +54,24 @@ public class Player extends GameObject {
     public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
 
-        TextureRegion sprite = animation_up.getKeyFrame(stateTime, true);
+        TextureRegion region = animation_up.getKeyFrame(stateTime, true);
 
         if(xSpeed < 0) {
-            sprite = animation_left.getKeyFrame(stateTime, true);
+            region = animation_left.getKeyFrame(stateTime, true);
         } else if(xSpeed > 0) {
-            sprite = animation_right.getKeyFrame(stateTime, true);
+            region = animation_right.getKeyFrame(stateTime, true);
         }
 
-        batch.draw(sprite, x, y, width, height);
+        sprite = new Sprite(region);
+
+        sprite.setX(x);
+        sprite.setY(y);
+
+        if(alpha > 1) {
+            alpha = 1;
+        }
+
+        sprite.draw(batch, alpha);
 
         x+=xSpeed;
         if(x < 0) x = 0;
@@ -77,8 +87,6 @@ public class Player extends GameObject {
       if((int)distance%5 == 0) {
           ySpeed += 0.02f;
       }
-
-      System.out.println(ySpeed);
 
         if(ObjectHandler.checkCollision()) {
             isDead = true;

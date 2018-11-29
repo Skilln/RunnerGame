@@ -13,6 +13,7 @@ import com.skilln.game.GameState;
 import com.skilln.game.InputHandler;
 import com.skilln.game.objects.EnemySpawn;
 import com.skilln.game.objects.GameId;
+import com.skilln.game.objects.Man;
 import com.skilln.game.objects.ObjectHandler;
 import com.skilln.game.objects.Player;
 
@@ -24,6 +25,7 @@ public class GameScreen implements Screen {
     private PauseableThread thread;
 
     private Player player;
+    private Man man;
 
     private Texture background;
 
@@ -31,9 +33,10 @@ public class GameScreen implements Screen {
 
     private OrthographicCamera camera;
 
-    private int y,  y1;
-
     private synchronized void start() {
+
+        Player.ySpeed = 4;
+
         thread = new PauseableThread(new EnemySpawn());
 
         thread.start();
@@ -52,42 +55,56 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(input);
 
-        player = new Player(0,50, GameId.Player);
+        man = new Man(0, 50, GameId.Man);
+
+        man.setX(Application.width/2-(man.getWidth()/2));
+
+        player = new Player(0,0, GameId.Player);
 
         player.setX(Application.width/2-(player.getWidth()/2));
-        player.setY(Application.height/2-Application.height/4);
+        player.setY(100);
+
+        input.player = player;
+
+        ObjectHandler.addObject(player);
+
 
         font = new BitmapFont(false);
         font.setColor(Color.WHITE);
 
-        ObjectHandler.addObject(player);
+        ObjectHandler.addObject(man);
 
-        input.player = player;
-
-        y = 0;
-        y1 = Application.height;
-
-        start();
     }
 
     @Override
     public void render(float delta) {
+        if(player.getY() < Application.height/2-Application.height/4) {
+
+            player.setY(player.getY() + 2);
+            player.alpha *= 1.1f;
+        } else if(!player.start){
+
+            player.start = true;
+            start();
+        }
+
+
         if(!player.isDead()) {
             batch.setProjectionMatrix(camera.combined);
             camera.update();
 
             batch.begin();
 
-            if (y1 - (int)Player.ySpeed <= 0) {
-                y = 0;
-                y1 = Application.height;
-            }
+          //  if (y1 - (int)Player.ySpeed <= 0) {
+          //      y = 0;
+           //     y1 = Application.height;
+          //  }
 
-            y -= (int)Player.ySpeed;
-            y1 -= (int)Player.ySpeed;
+         //   y -= (int)Player.ySpeed;
+         //   y1 -= (int)Player.ySpeed;
 
-            batch.draw(background, 0, y, Application.width, Application.height);
-            batch.draw(background, 0, y1, Application.width, Application.height);
+          // batch.draw(background, 0, y, Application.width, Application.height);
+          //  batch.draw(background, 0, y1, Application.width, Application.height);
 
             ObjectHandler.render(batch);
 
@@ -107,7 +124,7 @@ public class GameScreen implements Screen {
     @Override
     public void pause() {
      //  System.out.println("!");
-        Gdx.app.log("PAUSE", "SCREEN PAUSE");
+       // Gdx.app.log("PAUSE", "SCREEN PAUSE");
 
         thread.onPause();
 
@@ -119,14 +136,14 @@ public class GameScreen implements Screen {
     public void resume() {
       //  System.out.println("$");
         thread.onResume();
-        Gdx.app.log("RESUME", "SCREEN RESUME");
+    //   Gdx.app.log("RESUME", "SCREEN RESUME");
     }
 
     @Override
     public void hide() {
      //   System.out.println("#");
 
-        Gdx.app.log("HIDE", "SCREEN HIDE");
+      //  Gdx.app.log("HIDE", "SCREEN HIDE");
 
         ObjectHandler.clear();
 

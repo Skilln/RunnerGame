@@ -71,7 +71,6 @@ public class MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 ScreenManager.setScreen(GameState.GAME);
 
-                dispose();
             }
         });
 

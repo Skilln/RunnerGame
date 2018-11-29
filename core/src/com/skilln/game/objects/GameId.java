@@ -2,7 +2,7 @@ package com.skilln.game.objects;
 
 public enum GameId {
 
-    Player("player"), Background("background"), Enemy("enemy");
+    Player("player"), Background("background"), Enemy("enemy"), Man("man");
 
     String name;
 

@@ -12,10 +12,14 @@ public class ObjectHandler {
 
         GameObject current;
 
-        for(int i = 0, size = objects.size; i < size; i++) {
+        for(int i = 0; i < objects.size; i++) {
             current = objects.get(i);
 
-            current.render(batch);
+            if(current.y < -200) {
+                removeObject(i);
+            } else {
+                current.render(batch);
+            }
         }
     }
 
@@ -54,8 +58,7 @@ public class ObjectHandler {
         GameObject player = getPlayer();
 
         for(int i = 1, size = objects.size; i < size; i++) {
-            if(objects.get(i).getHitBox().overlaps(player.getHitBox())) {
-                System.out.println("!!");
+            if(objects.get(i).getHitBox().overlaps(player.getHitBox()) && objects.get(i).getId() != GameId.Man) {
                 return true;
             }
         }

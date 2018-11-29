@@ -1,6 +1,7 @@
 package com.skilln.game.objects;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -12,15 +13,13 @@ public abstract class GameObject {
 
     protected int width, height;
 
-    protected Texture sprite;
+    protected Sprite sprite;
 
 
     public GameObject(float x, float y, GameId id) {
         this.x = x;
         this.y = y;
         this.id = id;
-
-        sprite = new Texture(id.name + ".png");
     }
 
     public abstract void render(SpriteBatch batch);
@@ -42,7 +41,7 @@ public abstract class GameObject {
         return id;
     }
 
-    public Texture getSprite() {
+    public Sprite getSprite() {
         return sprite;
     }
 
@@ -63,7 +62,11 @@ public abstract class GameObject {
     }
 
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
-
-
+    public void setHeight(int height) {
+        this.height = height;
+    }
 }
