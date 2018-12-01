@@ -1,33 +1,21 @@
-package com.skilln.game.objects;
+package com.skilln.game.object;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.skilln.game.Application;
 
 public class Player extends GameObject {
 
-    public float xSpeed;
-    public static float ySpeed;
+    private float xSpeed;
 
-    public boolean start = false;
+    private Animation<TextureRegion> animation_up, animation_left, animation_right;
 
-
-    public float alpha = 0.001f;
-    public float distance;
-    public int coins;
-
-    private float stateTime = 0;
-
-    public Animation<TextureRegion> animation_up, animation_left, animation_right;
-
-    private boolean isDead = false;
-
-    public Player(float x, float y, GameId id) {
-        super(x, y, id);
+    public Player(GameId id) {
+        super(id);
 
         TextureAtlas animation_up_atlas = new TextureAtlas("sprites/soul/Soul.atlas");
         TextureAtlas animation_left_atlas = new TextureAtlas("sprites/soul/Soul_left.atlas");
@@ -42,16 +30,17 @@ public class Player extends GameObject {
         animation_right = new Animation<TextureRegion>(0.11f, animation_right_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        ySpeed = 0;
-
-        width = 120;
-        height = 170;
+        setWidth(120);
+        setHeight(170);
+        setAlpha(0.01f);
     }
 
-
+    float stateTime = 0;
 
     @Override
-    public void render(SpriteBatch batch) {
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
         stateTime += Gdx.graphics.getDeltaTime();
 
         TextureRegion region = animation_up.getKeyFrame(stateTime, true);
@@ -62,39 +51,20 @@ public class Player extends GameObject {
             region = animation_right.getKeyFrame(stateTime, true);
         }
 
-        sprite = new Sprite(region);
+        setSprite(new Sprite(region));
 
-        sprite.setX(x);
-        sprite.setY(y);
-
-        if(alpha > 1) {
-            alpha = 1;
-        }
-
-        sprite.draw(batch, alpha);
-
-        x+=xSpeed;
-        if(x < 0) x = 0;
-        if(x > Application.width-width) x = Application.width-width;
-
-        update();
+        sprite.draw(batch, parentAlpha);
     }
 
     @Override
-    public void update() {
-        distance += (ySpeed/200.0f);
+    public void moveBy(float x, float y) {
+        super.moveBy(x, y);
 
-      if((int)distance%5 == 0) {
-          ySpeed += 0.02f;
-      }
+        if(getX() < 0) setX(0);
+        if(getX() > Application.width-width)  setX(Application.width-width);
 
-        if(ObjectHandler.checkCollision()) {
-            isDead = true;
-      }
+        setX(getX()+ x);
+
+        xSpeed = x;
     }
-
-    public boolean isDead(){
-        return isDead;
-    }
-
 }

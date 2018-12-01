@@ -1,4 +1,4 @@
-package com.skilln.game.objects;
+package com.skilln.game.object;
 
 public enum GameId {
 

@@ -4,115 +4,113 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.PauseableThread;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.skilln.game.Application;
 import com.skilln.game.GameState;
-import com.skilln.game.InputHandler;
-import com.skilln.game.objects.EnemySpawn;
-import com.skilln.game.objects.GameId;
-import com.skilln.game.objects.Man;
-import com.skilln.game.objects.ObjectHandler;
-import com.skilln.game.objects.Player;
+import com.skilln.game.object.GameStage;
+import com.skilln.game.object.EnemySpawn;
+import com.skilln.game.object.GameId;
+import com.skilln.game.object.Man;
+import com.skilln.game.object.Player;
 
 public class GameScreen implements Screen {
 
     private SpriteBatch batch;
-    private InputHandler input;
-
     private PauseableThread thread;
 
     private Player player;
     private Man man;
 
-    private Texture background;
-
     private BitmapFont font;
 
     private OrthographicCamera camera;
+    private GameStage stage;
+
+    private boolean start = false;
+
+    public static float speed = 0;
+    public static float distance = 0;
+
+    @Override
+    public void show() {
+
+        batch = new SpriteBatch();
+
+        camera = new OrthographicCamera(Application.width, Application.height);
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+
+        FitViewport viewport = new FitViewport(Application.width, Application.height, camera);
+
+        stage = new GameStage(viewport, batch);
+        man = new Man(GameId.Man);
+
+        man.setX(Application.width/2-man.getWidth()/4);
+        man.setY(150);
+
+        player = new Player(GameId.Player);
+
+        player.setX(Application.width/2-(player.getWidth()/2));
+        player.setY(150);
+
+        stage.addObject(man);
+        stage.addObject(player);
+
+        font = new BitmapFont(false);
+        font.setColor(Color.WHITE);
+
+    }
 
     private synchronized void start() {
 
-        Player.ySpeed = 4;
+        speed = 4;
 
-        thread = new PauseableThread(new EnemySpawn());
+        thread = new PauseableThread(new EnemySpawn(stage));
 
         thread.start();
     }
 
     @Override
-    public void show() {
-        batch = new SpriteBatch();
-
-        input = new InputHandler();
-
-        background = new Texture("background.png");
-
-        camera = new OrthographicCamera(Application.width, Application.height);
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-
-        Gdx.input.setInputProcessor(input);
-
-        man = new Man(0, 50, GameId.Man);
-
-        man.setX(Application.width/2-(man.getWidth()/2));
-
-        player = new Player(0,0, GameId.Player);
-
-        player.setX(Application.width/2-(player.getWidth()/2));
-        player.setY(100);
-
-        input.player = player;
-
-        ObjectHandler.addObject(player);
-
-
-        font = new BitmapFont(false);
-        font.setColor(Color.WHITE);
-
-        ObjectHandler.addObject(man);
-
-    }
-
-    @Override
     public void render(float delta) {
-        if(player.getY() < Application.height/2-Application.height/4) {
+        if(player.getY() < Application.height/2-Application.height/4 && man.isDead()) {
 
             player.setY(player.getY() + 2);
-            player.alpha *= 1.1f;
-        } else if(!player.start){
 
-            player.start = true;
+            if(player.getAlpha() < 0.95) {
+                player.setAlpha(player.getAlpha() * 1.09f);
+            } else player.setAlpha(1);
+
+        } else if(!start && player.getY() >= Application.height/2-Application.height/4){
+            start = true;
             start();
         }
 
+        stage.draw();
 
-        if(!player.isDead()) {
-            batch.setProjectionMatrix(camera.combined);
-            camera.update();
+        update();
 
-            batch.begin();
+    }
 
-          //  if (y1 - (int)Player.ySpeed <= 0) {
-          //      y = 0;
-           //     y1 = Application.height;
-          //  }
+    public void update() {
+        if(Gdx.input.isTouched()) {
+            if(Gdx.input.getX() > Gdx.graphics.getWidth()/2) {
 
-         //   y -= (int)Player.ySpeed;
-         //   y1 -= (int)Player.ySpeed;
-
-          // batch.draw(background, 0, y, Application.width, Application.height);
-          //  batch.draw(background, 0, y1, Application.width, Application.height);
-
-            ObjectHandler.render(batch);
-
-            font.draw(batch, "Distance : " + (int)player.distance, 100, 100 );
-
-            batch.end();
+                player.moveBy(5,0);
+            } else {
+                player.moveBy(-5, 0);
+            }
         } else {
-            ScreenManager.setScreen(GameState.GAMEOVER);
+            player.moveBy(0, 0);
+        }
+
+        if(start) {
+            distance += (speed/200.0f);
+
+            if((int)distance%5 == 0) {
+                speed += 0.02f;
+            }
         }
     }
 
@@ -123,9 +121,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-     //  System.out.println("!");
-       // Gdx.app.log("PAUSE", "SCREEN PAUSE");
-
         thread.onPause();
 
         Application.currentState = GameState.APPLICATION_PAUSE;
@@ -134,25 +129,22 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
-      //  System.out.println("$");
         thread.onResume();
-    //   Gdx.app.log("RESUME", "SCREEN RESUME");
+
     }
 
     @Override
     public void hide() {
-     //   System.out.println("#");
-
-      //  Gdx.app.log("HIDE", "SCREEN HIDE");
-
-        ObjectHandler.clear();
-
+        start = false;
+        distance = 0;
+        speed = 0;
         thread.stopThread();
     }
 
     @Override
     public void dispose() {
         batch.dispose();
+        font.dispose();
         thread.stopThread();
     }
 }

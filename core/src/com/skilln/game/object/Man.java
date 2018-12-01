@@ -1,40 +1,42 @@
-package com.skilln.game.objects;
+package com.skilln.game.object;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.TimeUtils;
-
+import com.skilln.game.screen.GameScreen;
 
 public class Man extends GameObject {
-
     private long time;
+    private boolean dead = false;
 
     private Animation<TextureRegion> animation;
 
-    public Man(float x, float y, GameId id) {
-        super(x, y, id);
-
+    public Man(GameId id) {
+        super(id);
         TextureAtlas atlas = new TextureAtlas("sprites/man/Man.atlas");
 
         animation = new Animation<TextureRegion>(0.1f, atlas.getRegions());
 
-        width = 512;
-        height = 512;
+        setWidth(512);
+        setHeight (512);
 
         time = TimeUtils.millis();
 
     }
 
+    public boolean isDead() {
+        return dead;
+    }
+
     float stateTime = 0;
 
     @Override
-    public void render(SpriteBatch batch) {
-
-        update();
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
 
         TextureRegion region;
 
@@ -47,19 +49,15 @@ public class Man extends GameObject {
             region = animation.getKeyFrame(0, false);
         }
 
-        sprite = new Sprite(region);
+        if(animation.isAnimationFinished(stateTime)) {
+            dead = true;
+        }
 
-        sprite.setX(x);
-        sprite.setY(y);
+        setSprite(new Sprite(region));
+        sprite.scale(1);
 
-        sprite.draw(batch);
+        sprite.draw(batch, parentAlpha);
 
-
-    }
-
-    @Override
-    public void update() {
-        y -= Player.ySpeed;
-
+        moveBy(0, -GameScreen.speed);
     }
 }
