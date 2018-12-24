@@ -1,10 +1,14 @@
 package com.skilln.game.object;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 import com.skilln.game.screen.ScreenManager;
 
@@ -14,12 +18,16 @@ public class GameStage extends Stage {
     private SpriteBatch batch;
     private Viewport viewport;
 
+    private Animation<TextureRegion> rain;
+
 
     public GameStage(Viewport viewport, SpriteBatch batch) {
         super(viewport, batch);
 
         this.batch = batch;
         this.viewport = viewport;
+
+        rain = new Animation<TextureRegion>(1f/9f, GameAtlas.rain.getRegions(), Animation.PlayMode.LOOP);
     }
 
     public void addObject(GameObject object) {
@@ -29,6 +37,12 @@ public class GameStage extends Stage {
     public void removeObject(GameObject object) {
         actors.removeValue(object, true);
     }
+
+    public void clear() {
+        actors.clear();
+    }
+
+    float a = 0;
 
     @Override
     public void draw() {
@@ -47,13 +61,17 @@ public class GameStage extends Stage {
             object.draw(batch, object.alpha);
         }
 
+        a += Gdx.graphics.getDeltaTime();
+
+        batch.draw(rain.getKeyFrame(a), 0, 0);
+
         batch.end();
 
         update();
     }
 
     public void update() {
-        GameObject object = null;
+        GameObject object;
         GameObject player = null;
         for(int i = 0; i < actors.size; i++) {
             object = actors.get(i);
@@ -62,12 +80,12 @@ public class GameStage extends Stage {
                 player = object;
             }
 
-            if(player != null && object.getId() != GameId.Player
+            if(player != null && object.getId() == GameId.Enemy
                     && object.getHitBox().overlaps(player.getHitBox())) {
-                ScreenManager.setScreen(GameState.GAMEOVER);
+                player.setDead(true);
             }
 
-            if(object.getY() <= -200) {
+            if(object.getY() <= -700 && object.getId() != GameId.Background) {
                 removeObject(object);
             }
         }

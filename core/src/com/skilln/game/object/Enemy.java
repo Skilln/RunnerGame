@@ -1,11 +1,14 @@
 package com.skilln.game.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.skilln.game.GameAtlas;
 import com.skilln.game.screen.GameScreen;
 
 import java.util.Random;
@@ -19,15 +22,34 @@ public class Enemy extends GameObject {
     public Enemy(GameId id) {
         super(id);
 
-        TextureAtlas atlas = new TextureAtlas("sprites/rock/Rock.atlas");
+        int type = random.nextInt(2);
 
-        animation = new Animation<TextureRegion>(0.5f, atlas.getRegions(), Animation.PlayMode.LOOP);
+        int size = random.nextInt(5);
+        int s = size%2+1;
 
-        setWidth(random.nextInt(196)+64);
-        setHeight(width);
+        TextureAtlas atlas;
+
+        if(type == 0) {
+            atlas  = GameAtlas.soul_hole;
+        } else {
+            atlas = GameAtlas.soul_hole1;
+        }
+
+        animation = new Animation<TextureRegion>(1f/10f, atlas.getRegions(), Animation.PlayMode.LOOP);
+
+      //  sprite = new Sprite(atlas.getRegions().get(random.nextInt(11)));
+
+        setWidth(atlas.getRegions().first().getRegionWidth()*s);
+        setHeight(atlas.getRegions().first().getRegionHeight()*s);
+
     }
 
     float stateTime = 0;
+
+    @Override
+    public Rectangle getHitBox() {
+        return new Rectangle(getX()+30, getY()+30, getWidth()-30, getHeight()-30);
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -37,10 +59,10 @@ public class Enemy extends GameObject {
 
         TextureRegion region = animation.getKeyFrame(stateTime, true);
 
-        setSprite(new Sprite(region));
+        batch.draw(region, getX(), getY(), getWidth(), getHeight());
 
-        sprite.draw(batch, parentAlpha);
 
-       moveBy(0, -GameScreen.speed);
+
+        moveBy(0, -GameScreen.speed);
     }
 }

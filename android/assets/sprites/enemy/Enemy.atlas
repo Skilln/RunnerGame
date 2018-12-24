@@ -1,0 +1,90 @@
+
+Enemy.png
+size: 2048,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+enemy
+  rotate: false
+  xy: 0, 600
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 0
+enemy
+  rotate: false
+  xy: 0, 300
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 1
+enemy
+  rotate: false
+  xy: 300, 600
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 2
+enemy
+  rotate: false
+  xy: 0, 0
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 3
+enemy
+  rotate: false
+  xy: 300, 300
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 4
+enemy
+  rotate: false
+  xy: 600, 600
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 5
+enemy
+  rotate: false
+  xy: 300, 0
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 6
+enemy
+  rotate: false
+  xy: 600, 300
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 7
+enemy
+  rotate: false
+  xy: 900, 600
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 8
+enemy
+  rotate: false
+  xy: 600, 0
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 9
+enemy
+  rotate: false
+  xy: 900, 300
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 10
+enemy
+  rotate: false
+  xy: 1200, 600
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: 11

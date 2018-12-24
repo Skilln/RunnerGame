@@ -1,0 +1,48 @@
+
+hollow.png
+size: 256,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+hollow
+  rotate: false
+  xy: 0, 340
+  size: 120, 170
+  orig: 120, 170
+  offset: 0, 0
+  index: 0
+hollow
+  rotate: false
+  xy: 0, 170
+  size: 120, 170
+  orig: 120, 170
+  offset: 0, 0
+  index: 1
+hollow
+  rotate: false
+  xy: 120, 340
+  size: 120, 170
+  orig: 120, 170
+  offset: 0, 0
+  index: 2
+hollow
+  rotate: false
+  xy: 0, 0
+  size: 120, 170
+  orig: 120, 170
+  offset: 0, 0
+  index: 3
+hollow
+  rotate: false
+  xy: 120, 170
+  size: 120, 170
+  orig: 120, 170
+  offset: 0, 0
+  index: 4
+hollow
+  rotate: false
+  xy: 120, 0
+  size: 120, 170
+  orig: 120, 170
+  offset: 0, 0
+  index: 5

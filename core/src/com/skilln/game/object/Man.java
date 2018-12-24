@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.skilln.game.GameAtlas;
 import com.skilln.game.screen.GameScreen;
 
 public class Man extends GameObject {
@@ -17,12 +19,9 @@ public class Man extends GameObject {
 
     public Man(GameId id) {
         super(id);
-        TextureAtlas atlas = new TextureAtlas("sprites/man/Man.atlas");
+        TextureAtlas atlas = GameAtlas.man;
 
         animation = new Animation<TextureRegion>(0.1f, atlas.getRegions());
-
-        setWidth(512);
-        setHeight (512);
 
         time = TimeUtils.millis();
 
@@ -35,12 +34,17 @@ public class Man extends GameObject {
     float stateTime = 0;
 
     @Override
+    public Rectangle getHitBox() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
         TextureRegion region;
 
-        if(TimeUtils.millis() - time >= 70) {
+        if(TimeUtils.millis() - time >= 100 ) {
 
             stateTime += Gdx.graphics.getDeltaTime();
 
@@ -54,7 +58,6 @@ public class Man extends GameObject {
         }
 
         setSprite(new Sprite(region));
-        sprite.scale(1);
 
         sprite.draw(batch, parentAlpha);
 

@@ -14,6 +14,10 @@ public abstract class GameObject extends Actor {
 
     protected GameId id;
 
+    protected boolean dead = false;
+
+    public abstract Rectangle getHitBox();
+
     public GameObject(GameId id) {
         this.id = id;
     }
@@ -28,16 +32,6 @@ public abstract class GameObject extends Actor {
         super.setY(y);
     }
 
-    public void setWidth(int width) {
-        super.setWidth(width);
-        this.width = width;
-    }
-
-    public void setHeight(int height) {
-        super.setHeight(height);
-        this.height = height;
-    }
-
     public void setAlpha(float alpha) {
         this.alpha = alpha;
     }
@@ -50,10 +44,6 @@ public abstract class GameObject extends Actor {
         return sprite;
     }
 
-    public Rectangle getHitBox() {
-        return new Rectangle(getX()+20, getY()+20, width-20, height-20);
-    }
-
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
         sprite.setX(getX());
@@ -62,5 +52,13 @@ public abstract class GameObject extends Actor {
 
     public GameId getId() {
         return id;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 }

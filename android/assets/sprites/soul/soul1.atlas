@@ -1,0 +1,62 @@
+
+soul1.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+soul1
+  rotate: false
+  xy: 0, 0
+  size: 112, 181
+  orig: 112, 181
+  offset: 0, 0
+  index: 0
+soul1
+  rotate: false
+  xy: 112, 0
+  size: 112, 181
+  orig: 112, 181
+  offset: 0, 0
+  index: 1
+soul1
+  rotate: false
+  xy: 224, 0
+  size: 112, 181
+  orig: 112, 181
+  offset: 0, 0
+  index: 2
+soul1
+  rotate: false
+  xy: 336, 0
+  size: 112, 181
+  orig: 112, 181
+  offset: 0, 0
+  index: 3
+soul1
+  rotate: false
+  xy: 448, 0
+  size: 112, 181
+  orig: 112, 181
+  offset: 0, 0
+  index: 4
+soul1
+  rotate: false
+  xy: 560, 0
+  size: 112, 181
+  orig: 112, 181
+  offset: 0, 0
+  index: 5
+soul1
+  rotate: false
+  xy: 672, 0
+  size: 112, 181
+  orig: 112, 181
+  offset: 0, 0
+  index: 6
+soul1
+  rotate: false
+  xy: 784, 0
+  size: 112, 181
+  orig: 112, 181
+  offset: 0, 0
+  index: 7

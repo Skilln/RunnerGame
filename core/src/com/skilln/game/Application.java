@@ -15,6 +15,7 @@ public class Application extends Game {
 	@Override
 	public void create () {
 		ScreenManager.init(this);
+		GameAtlas.init();
 
 		ScreenManager.setScreen(GameState.MENU);
 

@@ -2,10 +2,6 @@ package com.skilln.game.object;
 
 import com.badlogic.gdx.Gdx;
 import com.skilln.game.Application;
-import com.skilln.game.object.GameId;
-import com.skilln.game.object.GameObject;
-import com.skilln.game.object.GameStage;
-import com.skilln.game.object.Enemy;
 
 import java.util.Random;
 
@@ -20,7 +16,9 @@ public class EnemySpawn extends Thread implements Runnable {
     public void run() {
             final Random random = new Random();
 
-            final int x = random.nextInt(Application.width);
+            final int w = (random.nextInt(2)+1)*140;
+
+            final int x = random.nextInt(Application.width-w);
             final int y = Application.height + random.nextInt(200);
 
             Gdx.app.postRunnable(new Runnable() {
@@ -30,6 +28,9 @@ public class EnemySpawn extends Thread implements Runnable {
 
                     object.setX(x);
                     object.setY(y);
+
+                  //  object.setWidth(w);
+                  //  object.setHeight(w+40);
 
                     stage.addObject(object);
                 }

@@ -1,0 +1,76 @@
+
+soul_hole.png
+size: 2048,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+soul_hole
+  rotate: false
+  xy: 0, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+soul_hole
+  rotate: false
+  xy: 180, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: 1
+soul_hole
+  rotate: false
+  xy: 360, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: 2
+soul_hole
+  rotate: false
+  xy: 540, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: 3
+soul_hole
+  rotate: false
+  xy: 720, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: 4
+soul_hole
+  rotate: false
+  xy: 900, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: 5
+soul_hole
+  rotate: false
+  xy: 1080, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: 6
+soul_hole
+  rotate: false
+  xy: 1260, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: 7
+soul_hole
+  rotate: false
+  xy: 1440, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: 8
+soul_hole
+  rotate: false
+  xy: 1620, 0
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: 9

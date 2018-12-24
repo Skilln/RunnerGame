@@ -33,7 +33,7 @@ public class GameOverScreen implements Screen {
     @Override
     public void show() {
 
-        Application.currentState = GameState.MENU;
+        Gdx.app.log("Debug", "OVER");
 
         camera = new OrthographicCamera(Application.width, Application.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
@@ -119,11 +119,14 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void hide() {
-
+        restartButton.setDisabled(true);
+        toMenuButton.setDisabled(true);
     }
 
     @Override
     public void dispose() {
+        buttonAtlas.dispose();
+
 
     }
 }
