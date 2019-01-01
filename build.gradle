@@ -29,6 +29,7 @@ allprojects {
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
+        admobVersion = '8.3.0'
     }
 
     repositories {
@@ -76,6 +77,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
+        compile "com.google.android.gms:play-services-ads:$admobVersion"
         
     }
 }

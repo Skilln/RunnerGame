@@ -1,26 +1,26 @@
 
-menu.png
+interference.png
 size: 4096,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-menu
+Interference
   rotate: false
-  xy: 4, 0
+  xy: 0, 0
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: 0
-menu
+Interference
   rotate: false
-  xy: 728, 0
+  xy: 720, 0
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: 1
-menu
+Interference
   rotate: false
-  xy: 1452, 0
+  xy: 1440, 0
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0

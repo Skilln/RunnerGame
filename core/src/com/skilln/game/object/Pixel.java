@@ -2,6 +2,7 @@ package com.skilln.game.object;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.screen.GameScreen;
@@ -41,7 +42,7 @@ public class Pixel extends GameObject {
     }
 
     @Override
-    public Rectangle getHitBox() {
-        return new Rectangle();
+    public Circle getHitBox() {
+        return new Circle(getX(), getY(), getWidth()/2);
     }
 }

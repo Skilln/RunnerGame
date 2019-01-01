@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.skilln.game.GameAtlas;
@@ -34,8 +35,8 @@ public class Man extends GameObject {
     float stateTime = 0;
 
     @Override
-    public Rectangle getHitBox() {
-        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    public Circle getHitBox() {
+        return new Circle(getX(), getY(), getWidth()/2);
     }
 
     @Override

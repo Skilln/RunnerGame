@@ -1,17 +1,22 @@
 package com.skilln.game.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.skilln.game.Application;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 import com.skilln.game.screen.GameScreen;
 import com.skilln.game.screen.ScreenManager;
+
+import java.util.logging.FileHandler;
 
 public class Player extends GameObject {
 
@@ -39,14 +44,14 @@ public class Player extends GameObject {
         animation_die = new Animation<TextureRegion>(1f/9f, animation_die_atlas.getRegions(),
                 Animation.PlayMode.NORMAL);
 
-        setWidth(120);
-        setHeight(170);
+        setWidth(animation_die_atlas.getRegions().first().getRegionWidth());
+        setHeight(animation_die_atlas.getRegions().first().getRegionHeight());
         setAlpha(0.01f);
     }
 
     @Override
-    public Rectangle getHitBox() {
-        return new Rectangle(getX()+70, getY()+130, getWidth()-70, getHeight()-130);
+    public Circle getHitBox() {
+        return new Circle(getX()+getWidth()/2, getY()+getHeight()-50, getWidth()/2-40);
     }
 
     float stateTime = 0;
@@ -76,6 +81,13 @@ public class Player extends GameObject {
             region = animation_die.getKeyFrame(stateTime-dieTime, false);
 
             if(animation_die.isAnimationFinished(stateTime-dieTime)) {
+
+                FileHandle file = Gdx.files.local("data/record.txt");
+
+                if((int)GameScreen.distance > Integer.parseInt(file.readString())) {
+
+                    file.writeString((int) GameScreen.distance + "", false);
+                }
 
                ScreenManager.setScreen(GameState.GAMEOVER);
             }

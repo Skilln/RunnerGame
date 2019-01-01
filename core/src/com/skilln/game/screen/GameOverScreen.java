@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.skilln.game.Application;
+import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 
 public class GameOverScreen implements Screen {
@@ -27,8 +32,15 @@ public class GameOverScreen implements Screen {
     private TextureAtlas buttonAtlas;
 
     private OrthographicCamera camera;
+    private Texture back;
+
+    private SpriteBatch batch;
 
     private Skin skin;
+
+    private Sprite sprite;
+
+    private Animation<TextureRegion> over;
 
     @Override
     public void show() {
@@ -40,13 +52,15 @@ public class GameOverScreen implements Screen {
 
         FitViewport viewport = new FitViewport(Application.width, Application.height, camera);
 
-        SpriteBatch batch = new SpriteBatch();
+        batch = new SpriteBatch();
 
         stage = new Stage(viewport, batch);
 
         Gdx.input.setInputProcessor(stage);
 
-        buttonAtlas = new TextureAtlas("MenuButton.atlas");
+        over = new Animation<TextureRegion>(1f/20f, GameAtlas.interference.getRegions(), Animation.PlayMode.LOOP);
+
+        buttonAtlas = GameAtlas.button;
 
         skin = new Skin(buttonAtlas);
 
@@ -56,11 +70,14 @@ public class GameOverScreen implements Screen {
 
         style.up = skin.getDrawable("button_up");
         style.down = skin.getDrawable("button_down");
-        style.fontColor = Color.BLACK;
+        style.fontColor = Color.WHITE;
+
+        font = new BitmapFont(Gdx.files.internal("sprites/font/font.fnt"));
 
         style.font = font;
 
-        restartButton = new TextButton("Restart", style);
+
+        restartButton = new TextButton("Try again", style);
         toMenuButton = new TextButton("To menu", style);
 
         restartButton.setWidth(400);
@@ -70,10 +87,10 @@ public class GameOverScreen implements Screen {
         toMenuButton.setHeight(100);
 
         restartButton.setX(Application.width/2-restartButton.getWidth()/2);
-        restartButton.setY(Application.height/2-restartButton.getHeight()/2);
+        restartButton.setY(Application.height/2-restartButton.getHeight()/2-100);
 
         toMenuButton.setX(Application.width/2-restartButton.getWidth()/2);
-        toMenuButton.setY(Application.height/2-restartButton.getHeight()/2-200);
+        toMenuButton.setY(Application.height/2-restartButton.getHeight()/2-250);
 
 
         restartButton.addListener(new ChangeListener() {
@@ -93,11 +110,44 @@ public class GameOverScreen implements Screen {
         stage.addActor(restartButton);
         stage.addActor(toMenuButton);
 
+        double a = Math.random();
+
+        if(a <= 0.5) {
+            sprite = GameAtlas.text_0;
+        } else {
+            sprite = GameAtlas.text_1;
+        }
+
+        sprite.setY(Application.height/2);
+
+        back = GameAtlas.background_1;
+
     }
+
+    float a = 0;
+
+    float alpha = 0.1f;
 
     @Override
     public void render(float delta) {
+        batch.begin();
+
+        a += Gdx.graphics.getDeltaTime();
+
+        batch.draw(back, 0, 0);
+
+        batch.draw(over.getKeyFrame(a), 0, 0);
+
+        sprite.draw(batch, alpha);
+
+        batch.end();
+
         stage.draw();
+
+        if(alpha < 1.0) {
+            alpha*=1.03f;
+        }
+
         camera.update();
 
     }
@@ -121,6 +171,9 @@ public class GameOverScreen implements Screen {
     public void hide() {
         restartButton.setDisabled(true);
         toMenuButton.setDisabled(true);
+
+        a = 0;
+        alpha = 0.1f;
     }
 
     @Override

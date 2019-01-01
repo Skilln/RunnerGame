@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.skilln.game.screen.GameScreen;
 
@@ -45,7 +46,7 @@ public class Coin extends GameObject {
     }
 
     @Override
-    public Rectangle getHitBox() {
-        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    public Circle getHitBox() {
+        return new Circle(getX(), getY(), getWidth()/2);
     }
 }

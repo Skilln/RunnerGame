@@ -1,10 +1,13 @@
 package com.skilln.game.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -18,6 +21,8 @@ public class GameStage extends Stage {
     private SpriteBatch batch;
     private Viewport viewport;
 
+    private ShapeRenderer shapeRenderer;
+
     private Animation<TextureRegion> rain;
 
 
@@ -28,6 +33,8 @@ public class GameStage extends Stage {
         this.viewport = viewport;
 
         rain = new Animation<TextureRegion>(1f/9f, GameAtlas.rain.getRegions(), Animation.PlayMode.LOOP);
+
+        shapeRenderer = new ShapeRenderer();
     }
 
     public void addObject(GameObject object) {
@@ -59,6 +66,20 @@ public class GameStage extends Stage {
             object = actors.get(i);
 
             object.draw(batch, object.alpha);
+
+            if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                shapeRenderer.setProjectionMatrix(camera.combined);
+
+                shapeRenderer.setColor(Color.RED);
+
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+                shapeRenderer.circle(object.getHitBox().x, object.getHitBox().y, object.getHitBox().radius);
+
+                shapeRenderer.end();
+
+
+            }
         }
 
         a += Gdx.graphics.getDeltaTime();

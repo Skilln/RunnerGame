@@ -1,8 +1,12 @@
 package com.skilln.game.object;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.skilln.game.GameAtlas;
 
 public abstract class GameObject extends Actor {
 
@@ -16,7 +20,7 @@ public abstract class GameObject extends Actor {
 
     protected boolean dead = false;
 
-    public abstract Rectangle getHitBox();
+    public abstract Circle getHitBox();
 
     public GameObject(GameId id) {
         this.id = id;
@@ -61,4 +65,5 @@ public abstract class GameObject extends Actor {
     public boolean isDead() {
         return dead;
     }
+
 }

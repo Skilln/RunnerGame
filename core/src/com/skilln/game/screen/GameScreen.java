@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -35,12 +36,12 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private GameStage stage;
 
-
-
     private boolean start = false;
 
     public static float speed = 0;
     public static float distance = 0;
+    public static int record = 0;
+
     @Override
     public void show() {
 
@@ -66,8 +67,18 @@ public class GameScreen implements Screen {
         stage.addObject(man);
         stage.addObject(player);
 
-        font = new BitmapFont(false);
+        font = new BitmapFont(Gdx.files.internal("sprites/font/font_1.fnt"), false);
         font.setColor(Color.WHITE);
+
+        FileHandle file = Gdx.files.local("data/record.txt");
+
+        String rec = file.readString();
+
+        if(!rec.equals("")) {
+
+            record = Integer.parseInt(rec);
+        }
+
 
     }
 
@@ -81,6 +92,8 @@ public class GameScreen implements Screen {
         enemySpawn.start();
        // pixelSpawn.start();
     }
+
+    float alpha = 0.05f;
 
     @Override
     public void render(float delta) {
@@ -101,8 +114,14 @@ public class GameScreen implements Screen {
 
         batch.begin();
 
-
-        font.draw(batch, "Distance : " + (int)distance, 50, 100);
+        if(start) {
+            if(alpha < 0.95) {
+                font.setColor(255, 255, 255, alpha);
+                alpha*=1.09f;
+            }
+            font.draw(batch, "Distance : " + (int) distance, 20, Application.height-20);
+            font.draw(batch, "Record : " + (int) record, 20, Application.height-50);
+        }
 
         batch.end();
 
@@ -132,7 +151,7 @@ public class GameScreen implements Screen {
 
 
             if (start && Application.currentState != GameState.APPLICATION_PAUSE) {
-                distance += (speed / 200.0f);
+                distance += (speed / 250.0f);
 
                 if ((int) distance % 5 == 0) {
                     speed *= 1.002f;
@@ -169,6 +188,7 @@ public class GameScreen implements Screen {
         speed = 0;
         stage.clear();
         enemySpawn.stopThread();
+        alpha = 0.01f;
        // pixelSpawn.stopThread();
     }
 

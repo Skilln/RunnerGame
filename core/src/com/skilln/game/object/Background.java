@@ -3,6 +3,7 @@ package com.skilln.game.object;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.skilln.game.Application;
 import com.skilln.game.GameAtlas;
@@ -18,8 +19,12 @@ public class Background extends GameObject {
     public Background(GameId id) {
         super(id);
 
+        int a = (int)(Math.random()*5);
+
         texture_0 = GameAtlas.background_0;
-        texture_1 = GameAtlas.background_1;
+
+        texture_1 = GameAtlas.background[a];
+
 
         setWidth(Application.width);
         setHeight(Application.height);
@@ -32,7 +37,14 @@ public class Background extends GameObject {
         if(y - GameScreen.speed <= 0) {
             setY(0);
             y = Application.height;
+
+            int a = (int)(Math.random()*5);
+
             texture_0 = texture_1;
+
+            texture_1 = GameAtlas.background[a];
+
+
         } else {
             moveBy(0, -GameScreen.speed);
             y -= GameScreen.speed;
@@ -43,7 +55,7 @@ public class Background extends GameObject {
     }
 
     @Override
-    public Rectangle getHitBox() {
-        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    public Circle getHitBox() {
+        return new Circle(getX(), getY(), getWidth()/2);
     }
 }

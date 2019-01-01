@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.skilln.game.Application;
@@ -43,7 +44,7 @@ public class Logo extends GameObject {
     }
 
     @Override
-    public Rectangle getHitBox() {
+    public Circle getHitBox() {
         return null;
     }
 }
