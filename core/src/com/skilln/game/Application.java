@@ -12,6 +12,16 @@ public class Application extends Game {
 
 	public static GameState currentState;
 
+	public static AdHandler adHandler;
+
+	public Application(AdHandler adHandler) {
+		Application.adHandler = adHandler;
+	}
+
+	public Application() {
+		adHandler = null;
+	}
+
 	@Override
 	public void create () {
 		ScreenManager.init(this);
@@ -28,8 +38,6 @@ public class Application extends Game {
 
 		super.render();
 
-
-		//ScreenManager.getCurrentScreen().render(Gdx.graphics.getDeltaTime());
 	}
 	
 	@Override

@@ -39,6 +39,7 @@ public class GameAtlas {
     public static Texture test_2;
 
     public static void init() {
+        logo = new TextureAtlas("sprites/logo/logo.atlas");
         menu = new TextureAtlas("menu.atlas");
         interference = new TextureAtlas("interference.atlas");
         rain = new TextureAtlas("rain.atlas");
@@ -46,9 +47,8 @@ public class GameAtlas {
         soul = new TextureAtlas("sprites/soul/soul1.atlas");
         soul_left = new TextureAtlas("sprites/soul/soul1_left.atlas");
         soul_right = new TextureAtlas("sprites/soul/soul1_right.atlas");
-        soul_die = new TextureAtlas("sprites/soul/soul_die.atlas");
-        man = new TextureAtlas("sprites/man/Man.atlas");
-        logo = new TextureAtlas("sprites/logo/Logo.atlas");
+        soul_die = new TextureAtlas("sprites/soul/Soul_die.atlas");
+        man = new TextureAtlas("sprites/man/man.atlas");
         cloud = new TextureAtlas("sprites/cloud/cloud.atlas");
         hollow = new TextureAtlas("sprites/hollow/hollow.atlas");
         soul_hole = new TextureAtlas("sprites/hole/soul_hole.atlas");
@@ -72,6 +72,10 @@ public class GameAtlas {
         test_0 = new Texture("sprites/test_0.png");
         test_1 = new Texture("sprites/test_1.png");
         test_2 = new Texture("sprites/test_2.png");
+
+    }
+
+    public static void initInBackground() {
 
     }
 }

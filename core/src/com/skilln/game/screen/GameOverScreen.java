@@ -122,6 +122,9 @@ public class GameOverScreen implements Screen {
 
         back = GameAtlas.background_1;
 
+        if(Application.adHandler != null) {
+            Application.adHandler.showAd();
+        }
     }
 
     float a = 0;

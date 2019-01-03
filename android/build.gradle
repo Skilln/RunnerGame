@@ -31,6 +31,10 @@ android {
     }
 }
 
+dependencies {
+    implementation 'com.google.firebase:firebase-core:16.0.5'
+}
+
 
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders
@@ -106,7 +110,7 @@ eclipse {
 
     classpath {
         plusConfigurations += [ project.configurations.compile ]        
-        containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'       
+        containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'
     }
 
     project {
@@ -141,4 +145,5 @@ idea {
             }
         }
     }
+    apply plugin: 'com.google.gms.google-services'
 }
