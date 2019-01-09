@@ -18,7 +18,6 @@ public class Logo extends GameObject {
     public Logo(GameId id) {
         super(id);
 
-
         logo = new Animation<TextureRegion>(1f/30f, GameAtlas.logo.getRegions(), Animation.PlayMode.NORMAL);
 
 
@@ -30,17 +29,18 @@ public class Logo extends GameObject {
 
     }
 
-    float stateTime = 0;
+    float stateTime = -2;
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
         stateTime += Gdx.graphics.getDeltaTime();
+        if(stateTime >= 0) {
+            TextureRegion region = logo.getKeyFrame(stateTime);
 
-        TextureRegion region = logo.getKeyFrame(stateTime);
-
-        batch.draw(region, getX(), getY(), getWidth(), getHeight());
+            batch.draw(region, getX(), getY(), getWidth(), getHeight());
+        }
     }
 
     @Override

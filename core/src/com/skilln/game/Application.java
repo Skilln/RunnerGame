@@ -2,6 +2,7 @@ package com.skilln.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.skilln.game.screen.ScreenManager;
 
@@ -14,20 +15,28 @@ public class Application extends Game {
 
 	public static AdHandler adHandler;
 
+	public static Preferences record;
+	public static Preferences music;
+
 	public Application(AdHandler adHandler) {
 		Application.adHandler = adHandler;
 	}
 
 	public Application() {
-		adHandler = null;
+
 	}
 
 	@Override
 	public void create () {
-		ScreenManager.init(this);
 		GameAtlas.init();
+		ScreenManager.init(this);
+
+		record = Gdx.app.getPreferences("Record");
+		music = Gdx.app.getPreferences("Music");
 
 		ScreenManager.setScreen(GameState.MENU);
+
+
 
 	}
 

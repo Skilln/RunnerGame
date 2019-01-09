@@ -12,15 +12,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.skilln.game.Application;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 import com.skilln.game.object.GameId;
+import com.skilln.game.object.GameStage;
 import com.skilln.game.object.Logo;
 
 public class MenuScreen implements Screen {
@@ -34,19 +40,24 @@ public class MenuScreen implements Screen {
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
-    private TextureAtlas button;
-    private TextButton startButton;
-
     private boolean start = false;
 
     private Sprite sprite;
 
     private Music music;
 
+    private ImageButton sound, info;
+    private Button startgame;
+    private Skin sound_skin, info_skin;
+
     private Animation<TextureRegion> menu;
+
+    private boolean sound_off;
 
     @Override
     public void show() {
+
+        Application.currentState = GameState.MENU;
 
         camera = new OrthographicCamera(Application.width, Application.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
@@ -55,37 +66,95 @@ public class MenuScreen implements Screen {
 
         batch = new SpriteBatch();
 
-        button = GameAtlas.button;
+        sound_skin = new Skin(GameAtlas.sound_button);
+        info_skin = new Skin(GameAtlas.info_button);
 
-        Skin skin = new Skin(button);
+        sound_off = Application.music.getBoolean("music");
 
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 
-        style.up = skin.getDrawable("button_up");
-        style.down = skin.getDrawable("button_down");
-        style.fontColor = Color.WHITE;
+        if(!sound_off) {
+            style.up = sound_skin.getDrawable("sound_on");
+            style.checked = sound_skin.getDrawable("sound_off");
+        } else {
+            style.up = sound_skin.getDrawable("sound_off");
+            style.checked = sound_skin.getDrawable("sound_on");
+        }
 
-        font = new BitmapFont(Gdx.files.internal("sprites/font/font.fnt"));
+        ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
 
-        style.font = font;
-
-        startButton = new TextButton("Begin", style);
-
-        startButton.setWidth(400);
-        startButton.setHeight(100);
-
-        startButton.setX(Application.width/2-startButton.getWidth()/2);
-        startButton.setY(Application.height/2-startButton.getHeight()/2 -150);
-
-        startButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.setScreen(GameState.GAME);
-            }
-        });
+        style1.up = info_skin.getDrawable("info_0");
+        style1.down = info_skin.getDrawable("info_1");
 
         music = Gdx.audio.newMusic(Gdx.files.internal("audio/menu21.mp3"));
         music.setVolume(1.0f);
+
+        sound = new ImageButton(style);
+        info = new ImageButton(style1);
+
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+
+        startgame = new Button(buttonStyle);
+
+        startgame.setWidth(Application.width-200);
+        startgame.setHeight(Application.height-200);
+
+        startgame.setX(100);
+        startgame.setY(100);
+
+        startgame.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+               if(Application.currentState == GameState.MENU)
+                ScreenManager.setScreen(GameState.GAME);
+
+                return super.touchDown(event, x, y, pointer, button);
+
+            }
+        });
+
+        sound.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(!sound_off) {
+                    Application.music.putBoolean("music", true);
+                    sound_off = true;
+                    if(sound.isChecked()) {
+                        sound.setChecked(true);
+                    } else sound.setChecked(false);
+                    music.stop();
+                } else {
+                    Application.music.putBoolean("music", false);
+                    sound_off = false;
+                    if(sound.isChecked()) {
+                        sound.setChecked(true);
+                    } else sound.setChecked(false);
+                    music.play();
+                }
+            }
+        });
+
+        info.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                ScreenManager.setScreen(GameState.INFO);
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        sound.setWidth(100);
+        sound.setHeight(100);
+
+        info.setWidth(100);
+        info.setHeight(100);
+
+        sound.setX(Application.width-sound.getWidth());
+        sound.setY(Application.height-sound.getHeight());
+
+        info.setX(0);
+        info.setY(Application.height-info.getHeight());
 
         menu = new Animation<TextureRegion>(1f/9f, GameAtlas.menu.getRegions(), Animation.PlayMode.LOOP);
 
@@ -104,38 +173,41 @@ public class MenuScreen implements Screen {
         if(!start) {
             stage.addActor(logo);
         } else {
-      //      stage.addActor(startButton);
+            stage.addActor(sound);
+            stage.addActor(startgame);
+            stage.addActor(info);
         }
-
 
     }
 
-    float a = 0;
+    float a = -2;
     float alpha = 0.1f;
     boolean hide = false;
 
     @Override
     public void render(float delta) {
 
-        a += Gdx.graphics.getDeltaTime();
+        camera.update();
 
-        if(logo.logo.isAnimationFinished(a) ) {
+        a += delta;
 
-            camera.update();
+        if(logo.logo.isAnimationFinished(a)) {
+
             batch.begin();
 
             batch.draw(menu.getKeyFrame(a), 0, 0);
 
-            if(!music.isPlaying()) {
+            if(!music.isPlaying() && !sound_off) {
                 music.play();
             }
 
-            if(!start) {
-          //      stage.addActor(startButton);
-
-            }
-
             sprite.draw(batch, alpha);
+
+            if(!start) {
+                stage.addActor(sound);
+                stage.addActor(startgame);
+                stage.addActor(info);
+            }
 
             start = true;
 
@@ -155,10 +227,6 @@ public class MenuScreen implements Screen {
         }
 
         stage.draw();
-
-        if(start && Gdx.input.justTouched()) {
-            ScreenManager.setScreen(GameState.GAME);
-        }
 
     }
 
@@ -181,6 +249,9 @@ public class MenuScreen implements Screen {
     public void hide() {
         music.stop();
         alpha = 0.1f;
+        startgame.setDisabled(true);
+        sound.setDisabled(true);
+        info.setDisabled(true);
     }
 
     @Override

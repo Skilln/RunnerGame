@@ -135,7 +135,7 @@ public class GameOverScreen implements Screen {
     public void render(float delta) {
         batch.begin();
 
-        a += Gdx.graphics.getDeltaTime();
+        a += delta;
 
         batch.draw(back, 0, 0);
 

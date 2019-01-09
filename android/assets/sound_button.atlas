@@ -1,0 +1,20 @@
+
+sound_button.png
+size: 256,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+sound_off
+  rotate: false
+  xy: 0, 0
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+sound_on
+  rotate: false
+  xy: 100, 0
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1

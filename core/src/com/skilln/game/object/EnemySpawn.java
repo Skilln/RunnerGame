@@ -2,6 +2,7 @@ package com.skilln.game.object;
 
 import com.badlogic.gdx.Gdx;
 import com.skilln.game.Application;
+import com.skilln.game.screen.GameScreen;
 
 import java.util.Random;
 
@@ -14,25 +15,48 @@ public class EnemySpawn extends Thread implements Runnable {
     }
 
     public void run() {
-            final Random random = new Random();
+            Random random = new Random();
 
-            final int w = (random.nextInt(2)+1)*140;
+            int count;
+            int chance = 0;
 
-            final int x = random.nextInt(Application.width-w);
-            final int y = Application.height + random.nextInt(200);
+            if((int)GameScreen.distance < 200) {
+                chance = 8;
+            } else {
+                chance = 4;
+            }
+
+
+            if(random.nextInt(chance) == 0) {
+                count = 2;
+            } else {
+                count = 1;
+            }
+
+            final GameObject[] object = new GameObject[count];
+
+            object[0] = new Enemy(GameId.Enemy);
+
+            object[0].setX(random.nextInt(Application.width-(int)object[0].getWidth()));
+            object[0].setY(Application.height + random.nextInt(200));
+
+            if(count != 1) {
+               while (true) {
+                   object[1] = new Enemy((GameId.Enemy));
+
+                   object[1].setX(random.nextInt(Application.width-(int)object[0].getWidth()));
+                   object[1].setY(Application.height + random.nextInt(400));
+
+                   if(!object[0].getHitBox().overlaps(object[1].getHitBox())) break;
+               }
+            }
 
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    GameObject object = new Enemy(GameId.Enemy);
-
-                    object.setX(x);
-                    object.setY(y);
-
-                  //  object.setWidth(w);
-                  //  object.setHeight(w+40);
-
-                    stage.addObject(object);
+                  for(int i = 0; i < object.length; i++) {
+                      stage.addObject(object[i]);
+                  }
                 }
             });
 

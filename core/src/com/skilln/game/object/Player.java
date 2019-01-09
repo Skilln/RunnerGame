@@ -20,7 +20,7 @@ import java.util.logging.FileHandler;
 
 public class Player extends GameObject {
 
-    private float xSpeed;
+    public float xSpeed;
 
     private Animation<TextureRegion> animation_up, animation_left, animation_right, animation_die;
 
@@ -35,13 +35,13 @@ public class Player extends GameObject {
         animation_up = new Animation<TextureRegion>(1f/12f, animation_up_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        animation_left = new Animation<TextureRegion>(1f/9f, animation_left_atlas.getRegions(),
+        animation_left = new Animation<TextureRegion>(1f/12f, animation_left_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        animation_right = new Animation<TextureRegion>(1f/9f, animation_right_atlas.getRegions(),
+        animation_right = new Animation<TextureRegion>(1f/12f, animation_right_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        animation_die = new Animation<TextureRegion>(1f/9f, animation_die_atlas.getRegions(),
+        animation_die = new Animation<TextureRegion>(1f/12f, animation_die_atlas.getRegions(),
                 Animation.PlayMode.NORMAL);
 
         setWidth(animation_die_atlas.getRegions().first().getRegionWidth());
@@ -82,11 +82,13 @@ public class Player extends GameObject {
 
             if(animation_die.isAnimationFinished(stateTime-dieTime)) {
 
-                FileHandle file = Gdx.files.local("data/record.txt");
+                int rec = Application.record.getInteger("record");
 
-                if((int)GameScreen.distance > Integer.parseInt(file.readString())) {
+                if((int)GameScreen.distance > rec) {
 
-                    file.writeString((int) GameScreen.distance + "", false);
+                    Application.record.putInteger("record", (int)GameScreen.distance);
+                    Application.record.flush();
+
                 }
 
                ScreenManager.setScreen(GameState.GAMEOVER);
@@ -109,6 +111,5 @@ public class Player extends GameObject {
 
         setX(getX()+ x);
 
-        xSpeed = x;
     }
 }
