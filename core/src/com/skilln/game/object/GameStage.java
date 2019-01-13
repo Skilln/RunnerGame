@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
+import com.skilln.game.screen.GameScreen;
 import com.skilln.game.screen.ScreenManager;
 
 public class GameStage extends Stage {
@@ -89,6 +90,8 @@ public class GameStage extends Stage {
         batch.end();
 
         update();
+
+        super.draw();
     }
 
     public void update() {

@@ -20,11 +20,14 @@ public class GameAtlas {
     public static TextureAtlas sound_button;
     public static TextureAtlas info_button;
     public static TextureAtlas info;
+    public static TextureAtlas pause;
 
     public static TextureAtlas button;
 
     public static Texture background_0;
     public static Texture background_1;
+
+    public static Sprite pause_back;
 
     public static Sprite text_0;
     public static Sprite text_1;
@@ -47,6 +50,7 @@ public class GameAtlas {
         sound_button = new TextureAtlas("sound_button.atlas");
         info_button = new TextureAtlas("info_button.atlas");
         info = new TextureAtlas("info_back.atlas");
+        pause = new TextureAtlas("pause.atlas");
 
         button = new TextureAtlas("button.atlas");
 
@@ -57,6 +61,8 @@ public class GameAtlas {
         background[2] = new Texture("background4.jpg");
         background[3] = new Texture("background5.jpg");
         background[4] = new Texture("background6.jpg");
+
+        pause_back = new Sprite(new Texture("pause_back.jpg"));
 
         text_0 = new Sprite(new Texture("text_0.png"));
         text_1 = new Sprite(new Texture("text_1.png"));

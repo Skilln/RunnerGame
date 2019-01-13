@@ -1,6 +1,7 @@
 package com.skilln.game.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -62,6 +63,20 @@ public class InfoScreen implements Screen {
         });
 
         stage.addActor(back);
+
+        stage.addListener(new ClickListener() {
+            public boolean keyDown(InputEvent event, int keycode) {
+
+                if(keycode == Input.Keys.BACK) {
+                    ScreenManager.setScreen(GameState.MENU);
+                }
+
+                return super.keyDown(event, keycode);
+            }
+        });
+
+        Application.currentState = GameState.INFO;
+
 
         Gdx.input.setInputProcessor(stage);
 

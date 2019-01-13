@@ -1,39 +1,31 @@
 package com.skilln.game.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.skilln.game.Application;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
-import com.skilln.game.object.GameId;
-import com.skilln.game.object.GameStage;
-import com.skilln.game.object.Logo;
 
 public class MenuScreen implements Screen {
 
     private Stage stage;
-
-    private Logo logo;
 
     private BitmapFont font;
 
@@ -56,9 +48,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-
-        Application.currentState = GameState.MENU;
-
         camera = new OrthographicCamera(Application.width, Application.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
@@ -69,16 +58,19 @@ public class MenuScreen implements Screen {
         sound_skin = new Skin(GameAtlas.sound_button);
         info_skin = new Skin(GameAtlas.info_button);
 
-        sound_off = Application.music.getBoolean("music");
+        sound_off = Application.music.getBoolean("sound");
 
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+
 
         if(!sound_off) {
             style.up = sound_skin.getDrawable("sound_on");
             style.checked = sound_skin.getDrawable("sound_off");
+
         } else {
             style.up = sound_skin.getDrawable("sound_off");
             style.checked = sound_skin.getDrawable("sound_on");
+
         }
 
         ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
@@ -117,18 +109,29 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if(!sound_off) {
-                    Application.music.putBoolean("music", true);
+                    Application.music.putBoolean("sound", true);
+                    Application.music.flush();
+
+                    Gdx.app.log("MENU", Application.music.getBoolean("sound") + "");
+
                     sound_off = true;
                     if(sound.isChecked()) {
                         sound.setChecked(true);
                     } else sound.setChecked(false);
+
                     music.stop();
                 } else {
-                    Application.music.putBoolean("music", false);
+                    Application.music.putBoolean("sound", false);
+                    Application.music.flush();
+
+                    Gdx.app.log("MENU", Application.music.getBoolean("sound") + "");
+
                     sound_off = false;
+
                     if(sound.isChecked()) {
                         sound.setChecked(true);
                     } else sound.setChecked(false);
+
                     music.play();
                 }
             }
@@ -160,27 +163,39 @@ public class MenuScreen implements Screen {
 
         font = new BitmapFont(Gdx.files.internal("sprites/font/font.fnt"));
 
-        logo = new Logo(GameId.Logo);
-
         stage = new Stage(viewport, batch);
 
         sprite = GameAtlas.text_2;
 
         sprite.setY(Application.height/2-230);
 
-        Gdx.input.setInputProcessor(stage);
+        stage.addListener(new ClickListener() {
+            public boolean keyDown(InputEvent event, int keycode) {
 
-        if(!start) {
-            stage.addActor(logo);
-        } else {
+                if(keycode == Input.Keys.BACK) {
+                    Gdx.app.log("Menu", "TOUCHED");
+                    Gdx.app.exit();
+                }
+
+                return super.keyDown(event, keycode);
+            }
+        });
+
+
+        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setCatchBackKey(true);
+
+        if(start) {
             stage.addActor(sound);
             stage.addActor(startgame);
             stage.addActor(info);
         }
 
+        Application.currentState = GameState.MENU;
+
     }
 
-    float a = -2;
+    float a = 0;
     float alpha = 0.1f;
     boolean hide = false;
 
@@ -191,28 +206,26 @@ public class MenuScreen implements Screen {
 
         a += delta;
 
-        if(logo.logo.isAnimationFinished(a)) {
 
-            batch.begin();
+        batch.begin();
 
-            batch.draw(menu.getKeyFrame(a), 0, 0);
+        batch.draw(menu.getKeyFrame(a), 0, 0);
 
-            if(!music.isPlaying() && !sound_off) {
+        if(!music.isPlaying() && !sound_off) {
                 music.play();
-            }
-
-            sprite.draw(batch, alpha);
-
-            if(!start) {
-                stage.addActor(sound);
-                stage.addActor(startgame);
-                stage.addActor(info);
-            }
-
-            start = true;
-
-            batch.end();
         }
+
+        sprite.draw(batch, alpha);
+
+        if(!start) {
+            stage.addActor(sound);
+            stage.addActor(startgame);
+            stage.addActor(info);
+        }
+
+        start = true;
+
+        batch.end();
 
         if(alpha < 0.95f && !hide) {
             alpha*=1.05f;

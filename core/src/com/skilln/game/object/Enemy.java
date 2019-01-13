@@ -67,7 +67,6 @@ public class Enemy extends GameObject {
 
         batch.draw(region, getX(), getY(), getWidth(), getHeight());
 
-
         moveBy(0, -GameScreen.speed);
     }
 }

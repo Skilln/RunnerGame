@@ -76,7 +76,9 @@ public class Player extends GameObject {
                 dieTime = stateTime;
             }
 
-            GameScreen.speed = 0;
+            xSpeed = 0;
+
+            GameScreen.speed = 1;
 
             region = animation_die.getKeyFrame(stateTime-dieTime, false);
 

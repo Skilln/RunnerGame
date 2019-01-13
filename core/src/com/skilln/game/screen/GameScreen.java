@@ -1,22 +1,22 @@
 package com.skilln.game.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.PauseableThread;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.skilln.game.AdHandler;
 import com.skilln.game.Application;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
@@ -32,7 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 public class GameScreen implements Screen {
 
     private SpriteBatch batch;
-    private PauseableThread enemySpawn, pixelSpawn;
+    private PauseableThread enemySpawn;
 
     private Player player;
     private Man man;
@@ -44,14 +44,20 @@ public class GameScreen implements Screen {
 
     private boolean start = false;
 
-    private Button left, right;
+    private Button left, right, toGame;
+    private ImageButton pause;
+
+    private Skin pause_skin;
+    private Sprite pauseBack;
 
     private boolean touching;
+    private boolean onPause = false;
 
     public static float speed = 0;
     public static float distance = 0;
     public static int record = 0;
 
+    private float tempSpeed;
 
     @Override
     public void show() {
@@ -68,13 +74,15 @@ public class GameScreen implements Screen {
         stage = new GameStage(viewport, batch);
         man = new Man(GameId.Man);
 
+        pauseBack = GameAtlas.pause_back;
+
         man.setX(0);
         man.setY(0);
 
         player = new Player(GameId.Player);
 
         player.setX(Application.width / 2 - (player.getWidth() / 2));
-        player.setY(160);
+        player.setY(50);
 
         stage.addObject(new Background(GameId.Background));
         stage.addObject(man);
@@ -91,13 +99,29 @@ public class GameScreen implements Screen {
             record = 0;
         }
 
+        pause_skin = new Skin(GameAtlas.pause);
+
+        ImageButton.ImageButtonStyle pause_style = new ImageButton.ImageButtonStyle();
+
+        pause_style.up = pause_skin.getDrawable("pause");
+        pause_style.down = pause_skin.getDrawable("play");
+
+        pause = new ImageButton(pause_style);
+
+        pause.setWidth(100);
+        pause.setHeight(100);
+
+        pause.setX(Application.width-pause.getWidth());
+        pause.setY(Application.height-pause.getHeight());
+
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
         left = new Button(buttonStyle);
         right = new Button(buttonStyle);
+        toGame = new Button(buttonStyle);
 
         left.setWidth(Application.width / 2);
-        left.setHeight(Application.height);
+        left.setHeight(Application.height-100);
 
         left.setX(0);
         left.setY(0);
@@ -106,9 +130,9 @@ public class GameScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                if (!player.isDead() && start) {
+                if (!player.isDead() && start && !onPause) {
 
-                    player.xSpeed = -5-distance*0.02f;
+                    player.xSpeed = -5-distance*0.015f;
 
                     touching = true;
                 }
@@ -127,14 +151,14 @@ public class GameScreen implements Screen {
         });
 
         right.setWidth(Application.width / 2);
-        right.setHeight(Application.height);
+        right.setHeight(Application.height-100);
 
         right.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                if (!player.isDead() && start) {
-                    player.xSpeed = 5+distance*0.02f;
+                if (!player.isDead() && start  && !onPause) {
+                    player.xSpeed = 5+distance*0.015f;
                     touching = true;
                 }
                 return super.touchDown(event, x, y, pointer, button);
@@ -153,11 +177,56 @@ public class GameScreen implements Screen {
         right.setX(Application.width / 2);
         right.setY(0);
 
+        toGame.setWidth(Application.width);
+        toGame.setHeight(Application.height-pause.getHeight());
+
+        pause.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                pauseGame();
+
+                Gdx.app.log("!!", "!!");
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+        });
+
+        toGame.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                pauseGame();
+
+                toGame.setDisabled(false);
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        stage.addListener(new ClickListener() {
+
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+
+                if(keycode == Input.Keys.BACK) {
+                    if(!onPause) {
+                        pauseGame();
+                    } else {
+                        ScreenManager.setScreen(GameState.MENU);
+                    }
+                }
+                return super.keyDown(event, keycode);
+            }
+
+        });
+
+
         stage.addActor(right);
         stage.addActor(left);
+        stage.addActor(pause);
 
         Gdx.input.setInputProcessor(stage);
-
 
     }
 
@@ -166,17 +235,15 @@ public class GameScreen implements Screen {
         speed = 5;
 
         enemySpawn = new PauseableThread(new EnemySpawn(stage));
-        // pixelSpawn = new PauseableThread(new PixelSpawn(stage));
 
         enemySpawn.start();
-        // pixelSpawn.start();
     }
 
     float alpha = 0.05f;
 
     @Override
     public void render(float delta) {
-        if (player.getY() < Application.height / 2 - Application.height / 4 && man.isDead()) {
+        if (player.getY() < Application.height / 2 - Application.height / 4 - Application.height / 8 && man.isDead() && !onPause) {
 
             player.setY(player.getY() + 2);
 
@@ -184,7 +251,7 @@ public class GameScreen implements Screen {
                 player.setAlpha(player.getAlpha() * 1.09f);
             } else player.setAlpha(1);
 
-        } else if (!start && player.getY() >= Application.height / 2 - Application.height / 4) {
+        } else if (!start && player.getY() >= Application.height / 2 - Application.height / 4 - Application.height / 8 ) {
             start = true;
             start();
         }
@@ -202,6 +269,10 @@ public class GameScreen implements Screen {
             font.draw(batch, "Record : " + (int) record, 20, Application.height - 50);
         }
 
+        if(onPause) {
+          pauseBack.draw(batch, 0.6f);
+        }
+
         batch.end();
 
         update();
@@ -213,14 +284,6 @@ public class GameScreen implements Screen {
         if(touching) {
             player.moveBy(player.xSpeed, 0);
         }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.moveBy(5 + (distance * 0.01f), 0);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.moveBy(-5 - (distance * 0.01f), 0);
-        }
-
 
         if (start && Application.currentState != GameState.APPLICATION_PAUSE) {
             distance += (speed / 250.0f);
@@ -238,16 +301,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        enemySpawn.onPause();
-//        pixelSpawn.onPause();
+        pauseGame();
         Application.currentState = GameState.APPLICATION_PAUSE;
 
     }
 
     @Override
     public void resume() {
-        enemySpawn.onResume();
-        //   pixelSpawn.onResume();
         Application.currentState = GameState.GAME;
 
     }
@@ -257,10 +317,11 @@ public class GameScreen implements Screen {
         start = false;
         distance = 0;
         speed = 0;
+        tempSpeed = 0;
         stage.clear();
-        enemySpawn.stopThread();
+        if(enemySpawn != null) enemySpawn.stopThread();
         alpha = 0.01f;
-        // pixelSpawn.stopThread();
+        onPause = false;
     }
 
     @Override
@@ -268,7 +329,35 @@ public class GameScreen implements Screen {
         batch.dispose();
         font.dispose();
         enemySpawn.stopThread();
-        // pixelSpawn.stopThread();
+    }
+
+    private void pauseGame() {
+        if (!onPause) {
+            if(enemySpawn != null) {
+                enemySpawn.onPause();
+            }
+
+            toGame.setDisabled(true);
+
+            tempSpeed = speed;
+
+            speed = 0;
+
+            stage.addActor(toGame);
+
+            onPause = true;
+
+        } else {
+            if(enemySpawn != null) {
+                enemySpawn.onResume();
+            }
+            speed = tempSpeed;
+
+            toGame.remove();
+
+            onPause = false;
+
+        }
     }
 
 }

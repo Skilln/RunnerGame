@@ -1,6 +1,7 @@
 package com.skilln.game.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,10 +13,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.skilln.game.Application;
 import com.skilln.game.GameAtlas;
@@ -119,6 +122,18 @@ public class GameOverScreen implements Screen {
         }
 
         sprite.setY(Application.height/2);
+
+        stage.addListener(new ClickListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+
+                if(keycode == Input.Keys.BACK) {
+                   ScreenManager.setScreen(GameState.MENU);
+                }
+
+                return super.keyDown(event, keycode);
+            }
+        });
 
         back = GameAtlas.background_1;
 

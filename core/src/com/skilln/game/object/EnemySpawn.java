@@ -18,16 +18,8 @@ public class EnemySpawn extends Thread implements Runnable {
             Random random = new Random();
 
             int count;
-            int chance = 0;
 
-            if((int)GameScreen.distance < 200) {
-                chance = 8;
-            } else {
-                chance = 4;
-            }
-
-
-            if(random.nextInt(chance) == 0) {
+            if(random.nextInt(8) == 0) {
                 count = 2;
             } else {
                 count = 1;
@@ -61,7 +53,11 @@ public class EnemySpawn extends Thread implements Runnable {
             });
 
             try {
-                Thread.sleep(2000);
+                if((GameScreen.distance*4) < 1250) {
+                    Thread.sleep(1500 - (int) (GameScreen.distance*4));
+                } else {
+                    Thread.sleep(250);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
