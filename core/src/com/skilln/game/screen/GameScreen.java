@@ -185,8 +185,6 @@ public class GameScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 pauseGame();
 
-                Gdx.app.log("!!", "!!");
-
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -212,6 +210,7 @@ public class GameScreen implements Screen {
                 if(keycode == Input.Keys.BACK) {
                     if(!onPause) {
                         pauseGame();
+                        Application.adHandler.toast("If you quit, progress wouldn't be saved");
                     } else {
                         ScreenManager.setScreen(GameState.MENU);
                     }
@@ -301,7 +300,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        pauseGame();
+        if(!onPause) {
+            pauseGame();
+        }
         Application.currentState = GameState.APPLICATION_PAUSE;
 
     }

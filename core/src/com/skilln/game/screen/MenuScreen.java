@@ -111,9 +111,6 @@ public class MenuScreen implements Screen {
                 if(!sound_off) {
                     Application.music.putBoolean("sound", true);
                     Application.music.flush();
-
-                    Gdx.app.log("MENU", Application.music.getBoolean("sound") + "");
-
                     sound_off = true;
                     if(sound.isChecked()) {
                         sound.setChecked(true);
@@ -123,9 +120,6 @@ public class MenuScreen implements Screen {
                 } else {
                     Application.music.putBoolean("sound", false);
                     Application.music.flush();
-
-                    Gdx.app.log("MENU", Application.music.getBoolean("sound") + "");
-
                     sound_off = false;
 
                     if(sound.isChecked()) {

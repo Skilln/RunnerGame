@@ -1,26 +1,26 @@
 
-info_back.jpg
+info_back.png
 size: 4096,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 info_back
   rotate: false
-  xy: 2, 2
+  xy: 0, 0
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: 0
 info_back
   rotate: false
-  xy: 724, 2
+  xy: 720, 0
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0
   index: 1
 info_back
   rotate: false
-  xy: 1446, 2
+  xy: 1440, 0
   size: 720, 1280
   orig: 720, 1280
   offset: 0, 0

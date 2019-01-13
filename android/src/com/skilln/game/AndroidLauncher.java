@@ -20,6 +20,8 @@ public class AndroidLauncher extends AndroidApplication implements AdHandler {
 
 	private InterstitialAd ad;
 
+	private Handler handler = new Handler();
+
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,5 +58,14 @@ public class AndroidLauncher extends AndroidApplication implements AdHandler {
 	@Override
 	public void showAd() {
 		show();
+	}
+
+	public void toast(final String msg) {
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(AndroidLauncher.this, msg, Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 }
