@@ -1,0 +1,48 @@
+
+soul_die.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+soul_die
+  rotate: false
+  xy: 0, 0
+  size: 120, 190
+  orig: 120, 190
+  offset: 0, 0
+  index: 0
+soul_die
+  rotate: false
+  xy: 120, 0
+  size: 120, 190
+  orig: 120, 190
+  offset: 0, 0
+  index: 1
+soul_die
+  rotate: false
+  xy: 240, 0
+  size: 120, 190
+  orig: 120, 190
+  offset: 0, 0
+  index: 2
+soul_die
+  rotate: false
+  xy: 360, 0
+  size: 120, 190
+  orig: 120, 190
+  offset: 0, 0
+  index: 3
+soul_die
+  rotate: false
+  xy: 480, 0
+  size: 120, 190
+  orig: 120, 190
+  offset: 0, 0
+  index: 4
+soul_die
+  rotate: false
+  xy: 600, 0
+  size: 120, 190
+  orig: 120, 190
+  offset: 0, 0
+  index: 5

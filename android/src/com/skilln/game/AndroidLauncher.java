@@ -34,10 +34,13 @@ public class AndroidLauncher extends AndroidApplication implements AdHandler {
 	//	AdWhirlTargeting.setTestMode(true);
 
 		if(ad.isLoaded()) {
-			Log.d("APP", "Ad loaded!");
+		 	toast(ad.isLoaded() + "");
 		}
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+
+		config.useImmersiveMode = true;
+
 		initialize(new Application(this), config);
 
 
@@ -46,8 +49,8 @@ public class AndroidLauncher extends AndroidApplication implements AdHandler {
 	private void show() {
 		runOnUiThread(new Runnable() {
 			public void run() {
-					AdRequest request = new AdRequest.Builder().addTestDevice("1D16BFA0D64043B8424AD3E432D2A97D").build();
-			//		AdRequest request = new AdRequest.Builder().build();
+			//		AdRequest request = new AdRequest.Builder().addTestDevice("1D16BFA0D64043B8424AD3E432D2A97D").build();
+					AdRequest request = new AdRequest.Builder().build();
 
 					ad.loadAd(request);
 					ad.show();
