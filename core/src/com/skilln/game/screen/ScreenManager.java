@@ -29,6 +29,7 @@ public class ScreenManager {
         screens.put(GameState.GAME, new GameScreen());
         screens.put(GameState.GAMEOVER, new GameOverScreen());
         screens.put(GameState.INFO, new InfoScreen());
+        screens.put(GameState.SHOP, new ShopScreen());
 
     }
 

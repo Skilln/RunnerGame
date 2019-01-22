@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import com.skilln.game.GameAtlas;
 import com.skilln.game.screen.GameScreen;
 
 public class Coin extends GameObject {
@@ -17,8 +18,7 @@ public class Coin extends GameObject {
     public Coin(GameId id) {
         super(id);
 
-
-        TextureAtlas atlas = new TextureAtlas("sprites/coin/Coin.atlas");
+        TextureAtlas atlas = GameAtlas.coin;
 
         animation = new Animation<TextureRegion>(0.11f, atlas.getRegions(), Animation.PlayMode.LOOP);
 
@@ -47,6 +47,6 @@ public class Coin extends GameObject {
 
     @Override
     public Circle getHitBox() {
-        return new Circle(getX(), getY(), getWidth()/2);
+        return new Circle(getX()+getWidth()/2, getY()+getHeight()/2, getWidth()/2);
     }
 }

@@ -21,6 +21,17 @@ public class GameAtlas {
     public static TextureAtlas info_button;
     public static TextureAtlas info;
     public static TextureAtlas pause;
+    public static TextureAtlas coin;
+    public static TextureAtlas shop;
+    public static TextureAtlas shopButton;
+
+    public static TextureAtlas alpha_soul;
+    public static TextureAtlas alpha_soul_sold;
+    public static TextureAtlas first_soul;
+    public static TextureAtlas first_soul_sold;
+    public static TextureAtlas hollow_soul;
+    public static TextureAtlas hollow_soul_sold;
+    public static TextureAtlas soul_default;
 
     public static TextureAtlas button;
 
@@ -33,17 +44,18 @@ public class GameAtlas {
     public static Sprite text_1;
     public static Sprite text_2;
 
+    public static Sprite tutorial;
+
     public static Texture[] background = new Texture[5];
 
     public static void init() {
+
+        loadSkin(Application.data.getInteger("selected"));
+
         logo = new TextureAtlas("sprites/logo/logo.atlas");
         menu = new TextureAtlas("menu.atlas");
         interference = new TextureAtlas("interference.atlas");
         rain = new TextureAtlas("rain.atlas");
-        soul = new TextureAtlas("sprites/soul/soul1.atlas");
-        soul_left = new TextureAtlas("sprites/soul/soul1_left.atlas");
-        soul_right = new TextureAtlas("sprites/soul/soul1_right.atlas");
-        soul_die = new TextureAtlas("sprites/soul/soul1_die.atlas");
         man = new TextureAtlas("sprites/man/man.atlas");
         soul_hole = new TextureAtlas("sprites/hole/soul_hole.atlas");
         soul_hole1 = new TextureAtlas("sprites/hole/soul_hole1.atlas");
@@ -51,8 +63,19 @@ public class GameAtlas {
         info_button = new TextureAtlas("info_button.atlas");
         info = new TextureAtlas("info_back.atlas");
         pause = new TextureAtlas("pause.atlas");
+        coin = new TextureAtlas("sprites/coin/coin.atlas");
+        shop = new TextureAtlas("shop.atlas");
+
+        alpha_soul = new TextureAtlas("shop/alpha_soul.atlas");
+        alpha_soul_sold = new TextureAtlas("shop/alpha_soul_sold.atlas");
+        first_soul = new TextureAtlas("shop/first_soul.atlas");
+        first_soul_sold = new TextureAtlas("shop/first_soul_sold.atlas");
+        hollow_soul = new TextureAtlas("shop/hollow_soul.atlas");
+        hollow_soul_sold = new TextureAtlas("shop/hollow_soul_sold.atlas");
+        soul_default = new TextureAtlas("shop/soul.atlas");
 
         button = new TextureAtlas("button.atlas");
+        shopButton = new TextureAtlas("ShopButton.atlas");
 
         background_0 = new Texture("background_0.jpg");
         background_1 = new Texture("background.jpg");
@@ -68,7 +91,33 @@ public class GameAtlas {
         text_1 = new Sprite(new Texture("text_1.png"));
         text_2 = new Sprite(new Texture("text_2.png"));
 
+        tutorial = new Sprite(new Texture(("tutorial.png")));
 
+
+    }
+
+    public static void loadSkin(int index) {
+        if(index == 0) {
+            soul = new TextureAtlas("sprites/soul/soul1.atlas");
+            soul_left = new TextureAtlas("sprites/soul/soul1_left.atlas");
+            soul_right = new TextureAtlas("sprites/soul/soul1_right.atlas");
+            soul_die = new TextureAtlas("sprites/soul/soul1_die.atlas");
+        } else if(index == 1) {
+            soul = new TextureAtlas("sprites/soul/soul.atlas");
+            soul_left = new TextureAtlas("sprites/soul/soul_left.atlas");
+            soul_right = new TextureAtlas("sprites/soul/soul_right.atlas");
+            soul_die = new TextureAtlas("sprites/soul/soul_die.atlas");
+        } else if(index == 2) {
+            soul = new TextureAtlas("sprites/soul/hollow_up.atlas");
+            soul_left = new TextureAtlas("sprites/soul/hollow_left.atlas");
+            soul_right = new TextureAtlas("sprites/soul/hollow_right.atlas");
+            soul_die = new TextureAtlas("sprites/soul/hollow_die.atlas");
+        } else {
+            soul = new TextureAtlas("sprites/soul/alpha.atlas");
+            soul_left = new TextureAtlas("sprites/soul/alpha.atlas");
+            soul_right = new TextureAtlas("sprites/soul/alpha.atlas");
+            soul_die = new TextureAtlas("sprites/soul/alpha_die.atlas");
+        }
     }
 
 }

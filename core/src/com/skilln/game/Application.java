@@ -8,14 +8,18 @@ import com.skilln.game.screen.ScreenManager;
 
 public class Application extends Game {
 
-	public static final int width = 720;
-	public static final int height = 1280;
+	private static float WIDTH, HEIGHT;
+
+	public static int width = 720, widthFixed;
+	public static int height = 1280;
+
+	public static float ratio;
 
 	public static GameState currentState;
 
 	public static AdHandler adHandler;
 
-	public static Preferences record;
+	public static Preferences data;
 	public static Preferences music;
 
 	public Application(AdHandler adHandler) {
@@ -23,16 +27,26 @@ public class Application extends Game {
 	}
 
 	public Application() {
-
 	}
 
 	@Override
 	public void create () {
+
+		WIDTH = Gdx.graphics.getWidth();
+		HEIGHT = Gdx.graphics.getHeight();
+
+		ratio = HEIGHT/WIDTH;
+
+		height = (int)(width*ratio);
+		widthFixed = (int)(height/(16f/9f));
+
+		Gdx.app.log("START", "WIDTH : " + width + " HEIGHT : " + height);
+
+		data = Gdx.app.getPreferences("Data");
+		music = Gdx.app.getPreferences("Music");
+
 		GameAtlas.init();
 		ScreenManager.init(this);
-
-		record = Gdx.app.getPreferences("Record");
-		music = Gdx.app.getPreferences("Music");
 
 		ScreenManager.setScreen(GameState.MENU);
 

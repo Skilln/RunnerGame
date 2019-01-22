@@ -92,7 +92,7 @@ public class InfoScreen implements Screen {
 
         batch.begin();
 
-        batch.draw(menu.getKeyFrame(a), 0, 0);
+        batch.draw(menu.getKeyFrame(a), -(Application.widthFixed-Application.width)/2f, 0, Application.widthFixed, Application.height);
 
         batch.end();
 

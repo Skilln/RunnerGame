@@ -32,16 +32,20 @@ public class Player extends GameObject {
         TextureAtlas animation_right_atlas = GameAtlas.soul_right;
         TextureAtlas animation_die_atlas =GameAtlas.soul_die;
 
-        animation_up = new Animation<TextureRegion>(1f/12f, animation_up_atlas.getRegions(),
+        animation_up = new Animation<TextureRegion>(1f/(float)(animation_up_atlas.getRegions().size+4),
+                animation_up_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        animation_left = new Animation<TextureRegion>(1f/12f, animation_left_atlas.getRegions(),
+        animation_left = new Animation<TextureRegion>(1f/ (float)(animation_up_atlas.getRegions().size+4),
+                animation_left_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        animation_right = new Animation<TextureRegion>(1f/12f, animation_right_atlas.getRegions(),
+        animation_right = new Animation<TextureRegion>(1f/ (float)(animation_up_atlas.getRegions().size+4),
+                animation_right_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        animation_die = new Animation<TextureRegion>(1f/12f, animation_die_atlas.getRegions(),
+        animation_die = new Animation<TextureRegion>(1f/(float)(animation_up_atlas.getRegions().size+4),
+                animation_die_atlas.getRegions(),
                 Animation.PlayMode.NORMAL);
 
         setWidth(animation_die_atlas.getRegions().first().getRegionWidth());
@@ -84,12 +88,12 @@ public class Player extends GameObject {
 
             if(animation_die.isAnimationFinished(stateTime-dieTime)) {
 
-                int rec = Application.record.getInteger("record");
+                int rec = Application.data.getInteger("record");
 
                 if((int)GameScreen.distance > rec) {
 
-                    Application.record.putInteger("record", (int)GameScreen.distance);
-                    Application.record.flush();
+                    Application.data.putInteger("record", (int)GameScreen.distance);
+                    Application.data.flush();
 
                 }
 

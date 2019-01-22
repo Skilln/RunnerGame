@@ -38,9 +38,9 @@ public class MenuScreen implements Screen {
 
     private Music music;
 
-    private ImageButton sound, info;
+    private ImageButton sound, info, shop;
     private Button startgame;
-    private Skin sound_skin, info_skin;
+    private Skin sound_skin, info_skin, shop_skin;
 
     private Animation<TextureRegion> menu;
 
@@ -57,32 +57,39 @@ public class MenuScreen implements Screen {
 
         sound_skin = new Skin(GameAtlas.sound_button);
         info_skin = new Skin(GameAtlas.info_button);
+        shop_skin = new Skin(GameAtlas.shop);
 
         sound_off = Application.music.getBoolean("sound");
 
-        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        ImageButton.ImageButtonStyle sound_style = new ImageButton.ImageButtonStyle();
 
 
         if(!sound_off) {
-            style.up = sound_skin.getDrawable("sound_on");
-            style.checked = sound_skin.getDrawable("sound_off");
+            sound_style.up = sound_skin.getDrawable("sound_on");
+            sound_style.checked = sound_skin.getDrawable("sound_off");
 
         } else {
-            style.up = sound_skin.getDrawable("sound_off");
-            style.checked = sound_skin.getDrawable("sound_on");
+            sound_style.up = sound_skin.getDrawable("sound_off");
+            sound_style.checked = sound_skin.getDrawable("sound_on");
 
         }
 
-        ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
+        ImageButton.ImageButtonStyle info_style = new ImageButton.ImageButtonStyle();
 
-        style1.up = info_skin.getDrawable("info_0");
-        style1.down = info_skin.getDrawable("info_1");
+        info_style.up = info_skin.getDrawable("info_0");
+        info_style.down = info_skin.getDrawable("info_1");
+
+        ImageButton.ImageButtonStyle shop_style = new ImageButton.ImageButtonStyle();
+
+        shop_style.up = shop_skin.getDrawable("shop_0");
+        shop_style.down = shop_skin.getDrawable("shop_1");
 
         music = Gdx.audio.newMusic(Gdx.files.internal("audio/menu21.mp3"));
         music.setVolume(1.0f);
 
-        sound = new ImageButton(style);
-        info = new ImageButton(style1);
+        sound = new ImageButton(sound_style);
+        info = new ImageButton(info_style);
+        shop = new ImageButton(shop_style);
 
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
@@ -141,17 +148,33 @@ public class MenuScreen implements Screen {
             }
         });
 
+        shop.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                ScreenManager.setScreen(GameState.SHOP);
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
         sound.setWidth(100);
         sound.setHeight(100);
 
         info.setWidth(100);
         info.setHeight(100);
 
+        shop.setWidth(100);
+        shop.setHeight(100);
+
         sound.setX(Application.width-sound.getWidth());
         sound.setY(Application.height-sound.getHeight());
 
         info.setX(0);
         info.setY(Application.height-info.getHeight());
+
+        shop.setX(100);
+        shop.setY(Application.height-shop.getHeight());
 
         menu = new Animation<TextureRegion>(1f/9f, GameAtlas.menu.getRegions(), Animation.PlayMode.LOOP);
 
@@ -183,6 +206,7 @@ public class MenuScreen implements Screen {
             stage.addActor(sound);
             stage.addActor(startgame);
             stage.addActor(info);
+            stage.addActor(shop);
         }
 
         Application.currentState = GameState.MENU;
@@ -203,7 +227,7 @@ public class MenuScreen implements Screen {
 
         batch.begin();
 
-        batch.draw(menu.getKeyFrame(a), 0, 0);
+        batch.draw(menu.getKeyFrame(a), -(Application.widthFixed-Application.width)/2f, 0, Application.widthFixed, Application.height);
 
         if(!music.isPlaying() && !sound_off) {
                 music.play();
@@ -215,6 +239,7 @@ public class MenuScreen implements Screen {
             stage.addActor(sound);
             stage.addActor(startgame);
             stage.addActor(info);
+            stage.addActor(shop);
         }
 
         start = true;

@@ -29,13 +29,7 @@ public class AndroidLauncher extends AndroidApplication implements AdHandler {
 		MobileAds.initialize(this, "ca-app-pub-9869688794553717~8194525926");
 
 		ad = new InterstitialAd(this);
-		ad.setAdUnitId("ca-app-pub-9869688794553717/6947170665");
-
-	//	AdWhirlTargeting.setTestMode(true);
-
-		if(ad.isLoaded()) {
-		 	toast(ad.isLoaded() + "");
-		}
+		ad.setAdUnitId("ca-app-pub-9869688794553717/3612715251");
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 

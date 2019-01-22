@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
     private ImageButton pause;
 
     private Skin pause_skin;
-    private Sprite pauseBack;
+    private Sprite pauseBack, tutorial;
 
     private boolean touching;
     private boolean onPause = false;
@@ -56,15 +56,17 @@ public class GameScreen implements Screen {
     public static float speed = 0;
     public static float distance = 0;
     public static int record = 0;
+    public static int coins = 0;
 
     private float tempSpeed;
 
+    private boolean played;
+
     @Override
     public void show() {
-
-        Application.currentState = GameState.GAME;
-
         batch = new SpriteBatch();
+
+        played = Application.data.getBoolean("played");
 
         camera = new OrthographicCamera(Application.width, Application.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
@@ -75,6 +77,14 @@ public class GameScreen implements Screen {
         man = new Man(GameId.Man);
 
         pauseBack = GameAtlas.pause_back;
+
+        pauseBack.setRegionWidth(Application.width);
+        pauseBack.setRegionHeight(Application.height);
+
+        tutorial = GameAtlas.tutorial;
+
+        tutorial.setRegionWidth(Application.width);
+        tutorial.setRegionHeight(Application.height);
 
         man.setX(0);
         man.setY(0);
@@ -91,12 +101,19 @@ public class GameScreen implements Screen {
         font = new BitmapFont(Gdx.files.internal("sprites/font/font_1.fnt"), false);
         font.setColor(Color.WHITE);
 
-        int rec = Application.record.getInteger("record");
+        int rec = Application.data.getInteger("record");
+        int coins = Application.data.getInteger("coins");
 
         if (rec != Integer.MIN_VALUE) {
             record = rec;
         } else {
             record = 0;
+        }
+
+        if(coins != Integer.MIN_VALUE) {
+            GameScreen.coins = coins;
+        } else {
+            GameScreen.coins = 0;
         }
 
         pause_skin = new Skin(GameAtlas.pause);
@@ -225,6 +242,11 @@ public class GameScreen implements Screen {
         stage.addActor(left);
         stage.addActor(pause);
 
+        if(Application.ratio > 1.78) {
+            pauseBack.scale(0.25f);
+            tutorial.scale(0.2f);
+        }
+
         Gdx.input.setInputProcessor(stage);
 
     }
@@ -263,13 +285,24 @@ public class GameScreen implements Screen {
             if (alpha < 0.95) {
                 font.setColor(255, 255, 255, alpha);
                 alpha *= 1.09f;
+            } else {
+                alpha = 1;
             }
+
             font.draw(batch, "Distance : " + (int) distance, 20, Application.height - 20);
-            font.draw(batch, "Record : " + (int) record, 20, Application.height - 50);
+            font.draw(batch, "Record : " + record, 20, Application.height - 50);
+            font.draw(batch, "Coins : " + coins, 20, Application.height - 80);
+
+            if(!played) {
+                tutorial.draw(batch, alpha);
+            }
+
         }
 
         if(onPause) {
+
           pauseBack.draw(batch, 0.6f);
+
         }
 
         batch.end();
@@ -281,6 +314,11 @@ public class GameScreen implements Screen {
     public void update() {
 
         if(touching) {
+            if(!played) {
+                played = true;
+                Application.data.putBoolean("played", true);
+                Application.data.flush();
+            }
             player.moveBy(player.xSpeed, 0);
         }
 

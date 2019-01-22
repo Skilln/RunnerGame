@@ -50,8 +50,8 @@ public class Background extends GameObject {
             y -= GameScreen.speed;
         }
 
-        batch.draw(texture_0, getX(), getY(), getWidth(), getHeight());
-        batch.draw(texture_1, getX(), y, getWidth(), getHeight());
+        batch.draw(texture_0, -(Application.widthFixed-Application.width)/2f, getY(), Application.widthFixed, getHeight());
+        batch.draw(texture_1, -(Application.widthFixed-Application.width)/2f, y, Application.widthFixed, getHeight());
     }
 
     @Override

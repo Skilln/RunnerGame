@@ -92,8 +92,8 @@ public class GameOverScreen implements Screen {
         restartButton.setX(Application.width/2-restartButton.getWidth()/2);
         restartButton.setY(Application.height/2-restartButton.getHeight()/2-100);
 
-        toMenuButton.setX(Application.width/2-restartButton.getWidth()/2);
-        toMenuButton.setY(Application.height/2-restartButton.getHeight()/2-250);
+        toMenuButton.setX(Application.width/2-toMenuButton.getWidth()/2);
+        toMenuButton.setY(Application.height/2-toMenuButton.getHeight()/2-250);
 
 
         restartButton.addListener(new ChangeListener() {
@@ -154,7 +154,7 @@ public class GameOverScreen implements Screen {
 
         batch.draw(back, 0, 0);
 
-        batch.draw(over.getKeyFrame(a), 0, 0);
+        batch.draw(over.getKeyFrame(a), -(Application.widthFixed-Application.width)/2f, 0, Application.widthFixed, Application.height);
 
         sprite.draw(batch, alpha);
 

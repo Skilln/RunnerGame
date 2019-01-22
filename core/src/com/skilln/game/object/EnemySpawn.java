@@ -16,6 +16,7 @@ public class EnemySpawn extends Thread implements Runnable {
 
     public void run() {
             Random random = new Random();
+            boolean coin = false;
 
             int count;
 
@@ -23,6 +24,11 @@ public class EnemySpawn extends Thread implements Runnable {
                 count = 2;
             } else {
                 count = 1;
+            }
+
+            if(random.nextInt(20) == 0) {
+                count++;
+                coin = true;
             }
 
             final GameObject[] object = new GameObject[count];
@@ -36,11 +42,22 @@ public class EnemySpawn extends Thread implements Runnable {
                while (true) {
                    object[1] = new Enemy((GameId.Enemy));
 
-                   object[1].setX(random.nextInt(Application.width-(int)object[0].getWidth()));
+                   object[1].setX(random.nextInt(Application.width-(int)object[1].getWidth()));
                    object[1].setY(Application.height + random.nextInt(400));
 
                    if(!object[0].getHitBox().overlaps(object[1].getHitBox())) break;
                }
+                while (coin) {
+                    object[count-1] = new Coin(GameId.Coin);
+
+                    object[count-1].setX(random.nextInt(Application.width-(int)object[count-1].getWidth()));
+                    object[count-1].setY(Application.height + random.nextInt(400));
+
+                    if(count == 3 && !object[0].getHitBox().overlaps(object[count-1].getHitBox()) &&
+                            !object[1].getHitBox().overlaps(object[count-1].getHitBox())) break;
+                    if(count < 3 && !object[0].getHitBox().overlaps(object[count-1].getHitBox())) break;
+                }
+
             }
 
             Gdx.app.postRunnable(new Runnable() {

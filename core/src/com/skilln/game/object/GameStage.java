@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.skilln.game.Application;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 import com.skilln.game.screen.GameScreen;
@@ -107,6 +108,17 @@ public class GameStage extends Stage {
             if(player != null && object.getId() == GameId.Enemy
                     && object.getHitBox().overlaps(player.getHitBox())) {
                 player.setDead(true);
+            }
+
+            if(player != null && object.getId() == GameId.Coin
+                    && object.getHitBox().overlaps(player.getHitBox())) {
+
+                GameScreen.coins++;
+
+                removeObject(object);
+
+                Application.data.putInteger("coins", GameScreen.coins);
+                Application.data.flush();
             }
 
             if(object.getY() <= -700 && object.getId() != GameId.Background) {
