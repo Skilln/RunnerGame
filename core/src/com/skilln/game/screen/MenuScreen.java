@@ -44,7 +44,7 @@ public class MenuScreen implements Screen {
 
     private Animation<TextureRegion> menu;
 
-    private boolean sound_off;
+    public static boolean sound_off;
 
     @Override
     public void show() {
@@ -84,7 +84,7 @@ public class MenuScreen implements Screen {
         shop_style.up = shop_skin.getDrawable("shop_0");
         shop_style.down = shop_skin.getDrawable("shop_1");
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("audio/menu21.mp3"));
+        music = GameAtlas.menuSound;
         music.setVolume(1.0f);
 
         sound = new ImageButton(sound_style);
@@ -106,6 +106,8 @@ public class MenuScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                if(Application.currentState == GameState.MENU)
                 ScreenManager.setScreen(GameState.GAME);
+
+                 music.stop();
 
                 return super.touchDown(event, x, y, pointer, button);
 
@@ -184,13 +186,12 @@ public class MenuScreen implements Screen {
 
         sprite = GameAtlas.text_2;
 
-        sprite.setY(Application.height/2-230);
+        sprite.setY(Application.height/2f-230);
 
         stage.addListener(new ClickListener() {
             public boolean keyDown(InputEvent event, int keycode) {
 
                 if(keycode == Input.Keys.BACK) {
-                    Gdx.app.log("Menu", "TOUCHED");
                     Gdx.app.exit();
                 }
 
@@ -211,6 +212,10 @@ public class MenuScreen implements Screen {
 
         Application.currentState = GameState.MENU;
 
+        music.setLooping(true);
+
+        if(!sound_off) music.play();
+
     }
 
     float a = 0;
@@ -228,10 +233,6 @@ public class MenuScreen implements Screen {
         batch.begin();
 
         batch.draw(menu.getKeyFrame(a), -(Application.widthFixed-Application.width)/2f, 0, Application.widthFixed, Application.height);
-
-        if(!music.isPlaying() && !sound_off) {
-                music.play();
-        }
 
         sprite.draw(batch, alpha);
 
@@ -269,17 +270,17 @@ public class MenuScreen implements Screen {
 
     @Override
     public void pause() {
-
+        music.pause();
     }
 
     @Override
     public void resume() {
-
+        if(!sound_off) music.play();
     }
 
     @Override
     public void hide() {
-        music.stop();
+        //music.stop();
         alpha = 0.1f;
         startgame.setDisabled(true);
         sound.setDisabled(true);

@@ -1,5 +1,8 @@
 package com.skilln.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -48,6 +51,9 @@ public class GameAtlas {
 
     public static Texture[] background = new Texture[5];
 
+    public static Music menuSound, gameSound, gameOverSound;
+    public static Sound dieSound, coinSound;
+
     public static void init() {
 
         loadSkin(Application.data.getInteger("selected"));
@@ -92,6 +98,13 @@ public class GameAtlas {
         text_2 = new Sprite(new Texture("text_2.png"));
 
         tutorial = new Sprite(new Texture(("tutorial.png")));
+
+        menuSound = Gdx.audio.newMusic(Gdx.files.internal("audio/menu.mp3"));
+        gameOverSound = Gdx.audio.newMusic(Gdx.files.internal("audio/gameover.mp3"));
+        gameSound = Gdx.audio.newMusic(Gdx.files.internal("audio/game.mp3"));
+
+        dieSound = Gdx.audio.newSound(Gdx.files.internal("audio/die.mp3"));
+        coinSound = Gdx.audio.newSound(Gdx.files.internal("audio/coin.mp3"));
 
 
     }

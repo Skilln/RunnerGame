@@ -40,8 +40,6 @@ public class Application extends Game {
 		height = (int)(width*ratio);
 		widthFixed = (int)(height/(16f/9f));
 
-		Gdx.app.log("START", "WIDTH : " + width + " HEIGHT : " + height);
-
 		data = Gdx.app.getPreferences("Data");
 		music = Gdx.app.getPreferences("Music");
 

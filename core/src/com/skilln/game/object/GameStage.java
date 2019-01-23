@@ -15,6 +15,7 @@ import com.skilln.game.Application;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 import com.skilln.game.screen.GameScreen;
+import com.skilln.game.screen.MenuScreen;
 import com.skilln.game.screen.ScreenManager;
 
 public class GameStage extends Stage {
@@ -116,6 +117,8 @@ public class GameStage extends Stage {
                 GameScreen.coins++;
 
                 removeObject(object);
+
+                if(!MenuScreen.sound_off) GameAtlas.coinSound.play(1f);
 
                 Application.data.putInteger("coins", GameScreen.coins);
                 Application.data.flush();

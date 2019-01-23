@@ -3,6 +3,7 @@ package com.skilln.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -43,12 +44,12 @@ public class GameOverScreen implements Screen {
 
     private Sprite sprite;
 
+    private Music music;
+
     private Animation<TextureRegion> over;
 
     @Override
     public void show() {
-
-        Gdx.app.log("Debug", "OVER");
 
         camera = new OrthographicCamera(Application.width, Application.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
@@ -89,11 +90,11 @@ public class GameOverScreen implements Screen {
         toMenuButton.setWidth(400);
         toMenuButton.setHeight(100);
 
-        restartButton.setX(Application.width/2-restartButton.getWidth()/2);
-        restartButton.setY(Application.height/2-restartButton.getHeight()/2-100);
+        restartButton.setX(Application.width/2f-restartButton.getWidth()/2);
+        restartButton.setY(Application.height/2f-restartButton.getHeight()/2-100);
 
-        toMenuButton.setX(Application.width/2-toMenuButton.getWidth()/2);
-        toMenuButton.setY(Application.height/2-toMenuButton.getHeight()/2-250);
+        toMenuButton.setX(Application.width/2f-toMenuButton.getWidth()/2);
+        toMenuButton.setY(Application.height/2f-toMenuButton.getHeight()/2-250);
 
 
         restartButton.addListener(new ChangeListener() {
@@ -140,6 +141,13 @@ public class GameOverScreen implements Screen {
         if(Application.adHandler != null) {
             Application.adHandler.showAd();
         }
+
+        music = GameAtlas.gameOverSound;
+
+        music.setVolume(1f);
+        music.setLooping(true);
+
+        if (!MenuScreen.sound_off) music.play();
     }
 
     float a = 0;
@@ -177,18 +185,22 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void pause() {
-
+        if(music.isPlaying()) {
+            music.pause();
+        }
     }
 
     @Override
     public void resume() {
-
+        if (!MenuScreen.sound_off) music.play();
     }
 
     @Override
     public void hide() {
         restartButton.setDisabled(true);
         toMenuButton.setDisabled(true);
+
+        music.stop();
 
         a = 0;
         alpha = 0.1f;

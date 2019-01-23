@@ -1,6 +1,7 @@
 package com.skilln.game.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -14,6 +15,7 @@ import com.skilln.game.Application;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 import com.skilln.game.screen.GameScreen;
+import com.skilln.game.screen.MenuScreen;
 import com.skilln.game.screen.ScreenManager;
 
 import java.util.logging.FileHandler;
@@ -23,6 +25,8 @@ public class Player extends GameObject {
     public float xSpeed;
 
     private Animation<TextureRegion> animation_up, animation_left, animation_right, animation_die;
+
+    private Sound sound;
 
     public Player(GameId id) {
         super(id);
@@ -51,6 +55,8 @@ public class Player extends GameObject {
         setWidth(animation_die_atlas.getRegions().first().getRegionWidth());
         setHeight(animation_die_atlas.getRegions().first().getRegionHeight());
         setAlpha(0.01f);
+
+        sound = GameAtlas.dieSound;
     }
 
     @Override
@@ -77,6 +83,7 @@ public class Player extends GameObject {
 
         if(dead) {
             if(dieTime == 0) {
+              if(!MenuScreen.sound_off)  sound.play();
                 dieTime = stateTime;
             }
 

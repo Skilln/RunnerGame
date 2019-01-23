@@ -85,8 +85,8 @@ public class ShopScreen implements Screen {
         toMenuButton.setWidth(400);
         toMenuButton.setHeight(100);
 
-        toMenuButton.setX(Application.width/2-toMenuButton.getWidth()/2);
-        toMenuButton.setY(Application.height/2-toMenuButton.getHeight()/2-450);
+        toMenuButton.setX(Application.width/2f-toMenuButton.getWidth()/2);
+        toMenuButton.setY(Application.height/2f-toMenuButton.getHeight()/2-450);
 
         toMenuButton.addListener(new ChangeListener() {
             @Override
@@ -199,7 +199,6 @@ public class ShopScreen implements Screen {
             shopImageButton[i] = new ImageButton(style);
 
             if(selected == i) {
-                Gdx.app.log("SHOP", selected + "");
                 shopImageButton[i].setChecked(true);
             }
 
@@ -231,6 +230,8 @@ public class ShopScreen implements Screen {
 
                             shopImageButton[index].setStyle(imageButtonStyle);
                             GameAtlas.loadSkin(index);
+
+                            GameAtlas.coinSound.play();
 
                         } else {
 

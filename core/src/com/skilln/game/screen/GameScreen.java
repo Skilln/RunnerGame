@@ -3,6 +3,7 @@ package com.skilln.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -53,6 +54,8 @@ public class GameScreen implements Screen {
     private boolean touching;
     private boolean onPause = false;
 
+    private Music music;
+
     public static float speed = 0;
     public static float distance = 0;
     public static int record = 0;
@@ -100,6 +103,8 @@ public class GameScreen implements Screen {
 
         font = new BitmapFont(Gdx.files.internal("sprites/font/font_1.fnt"), false);
         font.setColor(Color.WHITE);
+
+        music = GameAtlas.gameSound;
 
         int rec = Application.data.getInteger("record");
         int coins = Application.data.getInteger("coins");
@@ -249,6 +254,11 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
+        music.setVolume(1f);
+        music.setLooping(true);
+
+        if(!MenuScreen.sound_off) music.play();
+
     }
 
     private synchronized void start() {
@@ -305,6 +315,10 @@ public class GameScreen implements Screen {
 
         }
 
+        if(player.isDead()) {
+            if(music.isPlaying()) music.stop();
+        }
+
         batch.end();
 
         update();
@@ -341,12 +355,14 @@ public class GameScreen implements Screen {
         if(!onPause) {
             pauseGame();
         }
+        music.pause();
         Application.currentState = GameState.APPLICATION_PAUSE;
 
     }
 
     @Override
     public void resume() {
+        if(!MenuScreen.sound_off) music.play();
         Application.currentState = GameState.GAME;
 
     }
@@ -361,6 +377,7 @@ public class GameScreen implements Screen {
         if(enemySpawn != null) enemySpawn.stopThread();
         alpha = 0.01f;
         onPause = false;
+        music.stop();
     }
 
     @Override
@@ -374,6 +391,7 @@ public class GameScreen implements Screen {
         if (!onPause) {
             if(enemySpawn != null) {
                 enemySpawn.onPause();
+                music.pause();
             }
 
             toGame.setDisabled(true);
@@ -389,6 +407,7 @@ public class GameScreen implements Screen {
         } else {
             if(enemySpawn != null) {
                 enemySpawn.onResume();
+                music.play();
             }
             speed = tempSpeed;
 
