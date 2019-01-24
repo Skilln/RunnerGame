@@ -87,7 +87,7 @@ public class GameStage extends Stage {
 
         a += Gdx.graphics.getDeltaTime();
 
-        batch.draw(rain.getKeyFrame(a), 0, 0);
+        batch.draw(rain.getKeyFrame(a), 0, 0, Application.widthFixed, Application.height);
 
         batch.end();
 

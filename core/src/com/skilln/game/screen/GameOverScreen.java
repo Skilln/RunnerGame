@@ -199,7 +199,8 @@ public class GameOverScreen implements Screen {
     public void hide() {
         restartButton.setDisabled(true);
         toMenuButton.setDisabled(true);
-
+        music.setVolume(0);
+        music.pause();
         music.stop();
 
         a = 0;

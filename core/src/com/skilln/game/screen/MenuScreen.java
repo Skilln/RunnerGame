@@ -106,7 +106,8 @@ public class MenuScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                if(Application.currentState == GameState.MENU)
                 ScreenManager.setScreen(GameState.GAME);
-
+                 music.setVolume(0);
+                 music.pause();
                  music.stop();
 
                 return super.touchDown(event, x, y, pointer, button);

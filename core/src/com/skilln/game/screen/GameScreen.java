@@ -248,7 +248,7 @@ public class GameScreen implements Screen {
         stage.addActor(pause);
 
         if(Application.ratio > 1.78) {
-            pauseBack.scale(0.25f);
+            pauseBack.scale(0.2f);
             tutorial.scale(0.2f);
         }
 
@@ -362,7 +362,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
-        if(!MenuScreen.sound_off) music.play();
+        if(!MenuScreen.sound_off && !onPause) music.play();
         Application.currentState = GameState.GAME;
 
     }
@@ -377,6 +377,9 @@ public class GameScreen implements Screen {
         if(enemySpawn != null) enemySpawn.stopThread();
         alpha = 0.01f;
         onPause = false;
+
+        music.setVolume(0);
+        music.pause();
         music.stop();
     }
 
