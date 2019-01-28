@@ -210,7 +210,11 @@ public class GameOverScreen implements Screen {
     @Override
     public void dispose() {
         buttonAtlas.dispose();
-
+        font.dispose();
+        stage.dispose();
+        music.dispose();
+        skin.dispose();
+        batch.dispose();
 
     }
 }

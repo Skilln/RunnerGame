@@ -61,7 +61,7 @@ public class Player extends GameObject {
 
     @Override
     public Circle getHitBox() {
-        return new Circle(getX()+getWidth()/2, getY()+getHeight()-50, getWidth()/2-40);
+        return new Circle(getX()+getWidth()/2, getY()+getHeight()-60, getWidth()/2-25);
     }
 
     float stateTime = 0;

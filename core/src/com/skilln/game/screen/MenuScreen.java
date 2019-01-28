@@ -292,6 +292,11 @@ public class MenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         font.dispose();
+        batch.dispose();
+        music.dispose();
+        shop_skin.dispose();
+        sound_skin.dispose();
+        info_skin.dispose();
         start = false;
         a = 0;
     }

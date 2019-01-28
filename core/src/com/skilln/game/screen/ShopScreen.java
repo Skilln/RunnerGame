@@ -161,7 +161,14 @@ public class ShopScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        shopButton.dispose();
+        font.dispose();
+        buttonAtlas.dispose();
+        label.dispose();
+        back.dispose();
+        toMenuSkin.dispose();
+        batch.dispose();
     }
 
     private void initButton() {

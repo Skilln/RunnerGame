@@ -339,8 +339,10 @@ public class GameScreen implements Screen {
         if (start && Application.currentState != GameState.APPLICATION_PAUSE) {
             distance += (speed / 250.0f);
 
-            if ((int) distance % 5 == 0) {
+            if ((int) distance % 5 == 0 && (int)distance <= 200) {
                 speed *= 1.002f;
+            } else if((int) distance % 5 == 0) {
+                speed *= 1.00012f;
             }
         }
     }
@@ -388,6 +390,9 @@ public class GameScreen implements Screen {
         batch.dispose();
         font.dispose();
         enemySpawn.stopThread();
+        music.dispose();
+        stage.dispose();
+        pause_skin.dispose();
     }
 
     private void pauseGame() {
@@ -410,7 +415,7 @@ public class GameScreen implements Screen {
         } else {
             if(enemySpawn != null) {
                 enemySpawn.onResume();
-                music.play();
+                if(!MenuScreen.sound_off) music.play();
             }
             speed = tempSpeed;
 
