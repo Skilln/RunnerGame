@@ -12,7 +12,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.5'
-        classpath 'com.google.gms:google-services:4.2.0'
+        classpath 'com.google.gms:google-services:4.3.2'
         
     }
 }
@@ -79,6 +79,7 @@ project(":android") {
         implementation "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
         implementation "com.google.android.gms:play-services-ads:$admobVersion"
+        implementation "com.google.android.gms:play-services-games:16.0.0"
         
     }
 }

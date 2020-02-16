@@ -40,6 +40,11 @@ public class Man extends GameObject {
     }
 
     @Override
+    public void update(float worldSpeed) {
+        moveBy(0, -worldSpeed);
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
@@ -61,7 +66,7 @@ public class Man extends GameObject {
         setSprite(new Sprite(region));
 
         sprite.draw(batch, parentAlpha);
-
-        moveBy(0, -GameScreen.speed);
     }
+
+
 }

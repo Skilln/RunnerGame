@@ -11,12 +11,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.skilln.game.Application;
+import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
-import com.skilln.game.GameState;
 import com.skilln.game.screen.GameScreen;
 import com.skilln.game.screen.MenuScreen;
-import com.skilln.game.screen.ScreenManager;
 
 public class GameStage extends Stage {
 
@@ -87,20 +85,20 @@ public class GameStage extends Stage {
 
         a += Gdx.graphics.getDeltaTime();
 
-        batch.draw(rain.getKeyFrame(a), 0, 0, Application.widthFixed, Application.height);
+        batch.draw(rain.getKeyFrame(a), 0, 0, WayToHeaven.widthFixed, WayToHeaven.height);
 
         batch.end();
-
-        update();
 
         super.draw();
     }
 
-    public void update() {
+    public void update(float worldSpeed) {
         GameObject object;
         GameObject player = null;
         for(int i = 0; i < actors.size; i++) {
             object = actors.get(i);
+
+            object.update(worldSpeed);
 
             if(object.getId() == GameId.Player) {
                 player = object;
@@ -120,8 +118,8 @@ public class GameStage extends Stage {
 
                 if(!MenuScreen.sound_off) GameAtlas.coinSound.play(1f);
 
-                Application.data.putInteger("coins", GameScreen.coins);
-                Application.data.flush();
+                WayToHeaven.data.putInteger("coins", GameScreen.coins);
+                WayToHeaven.data.flush();
             }
 
             if(object.getY() <= -700 && object.getId() != GameId.Background) {

@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.skilln.game.Application;
+import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 
@@ -31,10 +31,10 @@ public class InfoScreen implements Screen {
     @Override
     public void show() {
 
-        camera = new OrthographicCamera(Application.width, Application.height);
+        camera = new OrthographicCamera(WayToHeaven.width, WayToHeaven.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
-        FitViewport viewport = new FitViewport(Application.width, Application.height, camera);
+        FitViewport viewport = new FitViewport(WayToHeaven.width, WayToHeaven.height, camera);
 
         batch = new SpriteBatch();
 
@@ -46,8 +46,8 @@ public class InfoScreen implements Screen {
 
         back = new Button(buttonStyle);
 
-        back.setWidth(Application.width-200);
-        back.setHeight(Application.height-200);
+        back.setWidth(WayToHeaven.width-200);
+        back.setHeight(WayToHeaven.height-200);
 
         back.setX(100);
         back.setY(100);
@@ -75,7 +75,7 @@ public class InfoScreen implements Screen {
             }
         });
 
-        Application.currentState = GameState.INFO;
+        WayToHeaven.currentState = GameState.INFO;
 
 
         Gdx.input.setInputProcessor(stage);
@@ -92,7 +92,7 @@ public class InfoScreen implements Screen {
 
         batch.begin();
 
-        batch.draw(menu.getKeyFrame(a), -(Application.widthFixed-Application.width)/2f, 0, Application.widthFixed, Application.height);
+        batch.draw(menu.getKeyFrame(a), -(WayToHeaven.widthFixed- WayToHeaven.width)/2f, 0, WayToHeaven.widthFixed, WayToHeaven.height);
 
         batch.end();
 

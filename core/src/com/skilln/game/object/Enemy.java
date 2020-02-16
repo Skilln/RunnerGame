@@ -22,7 +22,7 @@ public class Enemy extends GameObject {
 
     private Animation<TextureRegion> animation;
 
-    private int size ;
+    private int size;
 
     public Enemy(GameId id) {
         super(id);
@@ -31,22 +31,22 @@ public class Enemy extends GameObject {
         int type = random.nextInt(2);
 
         int s = random.nextInt(5);
-        size = s%2+1;
+        size = s % 2 + 1;
 
         TextureAtlas atlas;
 
-        if(type == 0) {
-            atlas  = GameAtlas.soul_hole;
+        if (type == 0) {
+            atlas = GameAtlas.soul_hole;
         } else {
             atlas = GameAtlas.soul_hole1;
         }
 
-        animation = new Animation<TextureRegion>(1f/10f, atlas.getRegions(), Animation.PlayMode.LOOP);
+        animation = new Animation<TextureRegion>(1f / 10f, atlas.getRegions(), Animation.PlayMode.LOOP);
 
-      //  sprite = new Sprite(atlas.getRegions().get(random.nextInt(11)));
+        //  sprite = new Sprite(atlas.getRegions().get(random.nextInt(11)));
 
-        setWidth(atlas.getRegions().first().getRegionWidth()*size);
-        setHeight(atlas.getRegions().first().getRegionHeight()*size);
+        setWidth(atlas.getRegions().first().getRegionWidth() * size);
+        setHeight(atlas.getRegions().first().getRegionHeight() * size);
 
     }
 
@@ -54,7 +54,12 @@ public class Enemy extends GameObject {
 
     @Override
     public Circle getHitBox() {
-        return new Circle(getX()+getWidth()/2, getY()+getHeight()/2, getWidth()/2-(20*size));
+        return new Circle(getX() + getWidth() / 2, getY() + getHeight() / 2, getWidth() / 2 - (20 * size));
+    }
+
+    @Override
+    public void update(float worldSpeed) {
+        moveBy(0, -worldSpeed);
     }
 
     @Override
@@ -66,7 +71,6 @@ public class Enemy extends GameObject {
         TextureRegion region = animation.getKeyFrame(stateTime, true);
 
         batch.draw(region, getX(), getY(), getWidth(), getHeight());
-
-        moveBy(0, -GameScreen.speed);
     }
+
 }

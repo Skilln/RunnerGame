@@ -9,16 +9,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.PauseableThread;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.skilln.game.AdHandler;
-import com.skilln.game.Application;
+import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 import com.skilln.game.object.Background;
@@ -26,9 +23,10 @@ import com.skilln.game.object.GameStage;
 import com.skilln.game.object.EnemySpawn;
 import com.skilln.game.object.GameId;
 import com.skilln.game.object.Man;
-import com.skilln.game.object.Player;
+import com.skilln.game.object.player.Player;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.skilln.game.screen.ui.GameScreenUI;
 
 public class GameScreen implements Screen {
 
@@ -37,6 +35,7 @@ public class GameScreen implements Screen {
 
     private Player player;
     private Man man;
+    private Background background;
 
     private BitmapFont font;
 
@@ -45,59 +44,55 @@ public class GameScreen implements Screen {
 
     private boolean start = false;
 
-    private Button left, right, toGame;
-    private ImageButton pause;
-
-    private Skin pause_skin;
     private Sprite pauseBack, tutorial;
 
-    private boolean touching;
-    private boolean onPause = false;
+    private GameScreenUI ui;
 
     private Music music;
 
-    public static float speed = 0;
-    public static float distance = 0;
     public static int record = 0;
     public static int coins = 0;
 
-    private float tempSpeed;
-
     private boolean played;
+
+    private boolean scale = false;
 
     @Override
     public void show() {
         batch = new SpriteBatch();
 
-        played = Application.data.getBoolean("played");
+        played = WayToHeaven.data.getBoolean("played");
 
-        camera = new OrthographicCamera(Application.width, Application.height);
+        camera = new OrthographicCamera(WayToHeaven.width, WayToHeaven.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
-        FitViewport viewport = new FitViewport(Application.width, Application.height, camera);
+        FitViewport viewport = new FitViewport(WayToHeaven.width, WayToHeaven.height, camera);
+
 
         stage = new GameStage(viewport, batch);
         man = new Man(GameId.Man);
 
         pauseBack = GameAtlas.pause_back;
 
-        pauseBack.setRegionWidth(Application.width);
-        pauseBack.setRegionHeight(Application.height);
+        pauseBack.setRegionWidth(WayToHeaven.width);
+        pauseBack.setRegionHeight(WayToHeaven.height);
 
         tutorial = GameAtlas.tutorial;
 
-        tutorial.setRegionWidth(Application.width);
-        tutorial.setRegionHeight(Application.height);
+        tutorial.setRegionWidth(WayToHeaven.width);
+        tutorial.setRegionHeight(WayToHeaven.height);
 
         man.setX(0);
         man.setY(0);
 
         player = new Player(GameId.Player);
 
-        player.setX(Application.width / 2 - (player.getWidth() / 2));
+        player.setX(WayToHeaven.width / 2f - (player.getWidth() / 2f));
         player.setY(50);
 
-        stage.addObject(new Background(GameId.Background));
+        background = new Background(GameId.Background);
+
+        stage.addObject(background);
         stage.addObject(man);
         stage.addObject(player);
 
@@ -106,8 +101,8 @@ public class GameScreen implements Screen {
 
         music = GameAtlas.gameSound;
 
-        int rec = Application.data.getInteger("record");
-        int coins = Application.data.getInteger("coins");
+        int rec = WayToHeaven.data.getInteger("record");
+        int coins = WayToHeaven.data.getInteger("coins");
 
         if (rec != Integer.MIN_VALUE) {
             record = rec;
@@ -115,155 +110,33 @@ public class GameScreen implements Screen {
             record = 0;
         }
 
-        if(coins != Integer.MIN_VALUE) {
+        if (coins != Integer.MIN_VALUE) {
             GameScreen.coins = coins;
         } else {
             GameScreen.coins = 0;
         }
 
-        pause_skin = new Skin(GameAtlas.pause);
+        ui = new GameScreenUI(this);
 
-        ImageButton.ImageButtonStyle pause_style = new ImageButton.ImageButtonStyle();
-
-        pause_style.up = pause_skin.getDrawable("pause");
-        pause_style.down = pause_skin.getDrawable("play");
-
-        pause = new ImageButton(pause_style);
-
-        pause.setWidth(100);
-        pause.setHeight(100);
-
-        pause.setX(Application.width-pause.getWidth());
-        pause.setY(Application.height-pause.getHeight());
-
-        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-
-        left = new Button(buttonStyle);
-        right = new Button(buttonStyle);
-        toGame = new Button(buttonStyle);
-
-        left.setWidth(Application.width / 2);
-        left.setHeight(Application.height-100);
-
-        left.setX(0);
-        left.setY(0);
-
-        left.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                if (!player.isDead() && start && !onPause) {
-
-                    player.xSpeed = -5-distance*0.015f;
-
-                    touching = true;
-                }
-
-                return super.touchDown(event, x, y, pointer, button);
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-
-                player.xSpeed = 0;
-
-                touching = false;
-            }
-        });
-
-        right.setWidth(Application.width / 2);
-        right.setHeight(Application.height-100);
-
-        right.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                if (!player.isDead() && start  && !onPause) {
-                    player.xSpeed = 5+distance*0.015f;
-                    touching = true;
-                }
-                return super.touchDown(event, x, y, pointer, button);
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-
-                player.xSpeed = 0;
-
-                touching = false;
-            }
-        });
-
-        right.setX(Application.width / 2);
-        right.setY(0);
-
-        toGame.setWidth(Application.width);
-        toGame.setHeight(Application.height-pause.getHeight());
-
-        pause.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                pauseGame();
-
-                return super.touchDown(event, x, y, pointer, button);
-            }
-
-        });
-
-        toGame.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                pauseGame();
-
-                toGame.setDisabled(false);
-
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
-
-        stage.addListener(new ClickListener() {
-
-            @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-
-                if(keycode == Input.Keys.BACK) {
-                    if(!onPause) {
-                        pauseGame();
-                        Application.adHandler.toast("If you quit, progress wouldn't be saved");
-                    } else {
-                        ScreenManager.setScreen(GameState.MENU);
-                    }
-                }
-                return super.keyDown(event, keycode);
-            }
-
-        });
-
-
-        stage.addActor(right);
-        stage.addActor(left);
-        stage.addActor(pause);
-
-        if(Application.ratio > 1.78) {
-            pauseBack.scale(0.2f);
-            tutorial.scale(0.2f);
-        }
 
         Gdx.input.setInputProcessor(stage);
+
+        if (WayToHeaven.ratio > 1.78 && !scale) {
+            pauseBack.scale(0.2f);
+            tutorial.scale(0.2f);
+
+            scale = true;
+        }
 
         music.setVolume(1f);
         music.setLooping(true);
 
-        if(!MenuScreen.sound_off) music.play();
 
     }
 
     private synchronized void start() {
 
-        speed = 5;
+        if (!MenuScreen.sound_off) music.play();
 
         enemySpawn = new PauseableThread(new EnemySpawn(stage));
 
@@ -274,7 +147,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (player.getY() < Application.height / 2 - Application.height / 4 - Application.height / 8 && man.isDead() && !onPause) {
+        if (player.getY() < WayToHeaven.height / 2 - WayToHeaven.height / 4 - WayToHeaven.height / 8 && man.isDead() && !ui.isOnPause()) {
 
             player.setY(player.getY() + 2);
 
@@ -282,7 +155,7 @@ public class GameScreen implements Screen {
                 player.setAlpha(player.getAlpha() * 1.09f);
             } else player.setAlpha(1);
 
-        } else if (!start && player.getY() >= Application.height / 2 - Application.height / 4 - Application.height / 8 ) {
+        } else if (!start && player.getY() >= WayToHeaven.height / 2 - WayToHeaven.height / 4 - WayToHeaven.height / 8) {
             start = true;
             start();
         }
@@ -299,24 +172,24 @@ public class GameScreen implements Screen {
                 alpha = 1;
             }
 
-            font.draw(batch, "Distance : " + (int) distance, 20, Application.height - 20);
-            font.draw(batch, "Record : " + record, 20, Application.height - 50);
-            font.draw(batch, "Coins : " + coins, 20, Application.height - 80);
+            font.draw(batch, "Distance : " + (int) player.getPlayerMovement().getDistance(), 20, WayToHeaven.height - 20);
+            font.draw(batch, "Record : " + record, 20, WayToHeaven.height - 50);
+            font.draw(batch, "Coins : " + coins, 20, WayToHeaven.height - 80);
 
-            if(!played) {
+            if (!played) {
                 tutorial.draw(batch, alpha);
             }
 
         }
 
-        if(onPause) {
+        if (ui.isOnPause()) {
 
-          pauseBack.draw(batch, 0.6f);
+            pauseBack.draw(batch, 0.6f);
 
         }
 
-        if(player.isDead()) {
-            if(music.isPlaying()) music.stop();
+        if (player.isDead()) {
+            if (music.isPlaying()) music.stop();
         }
 
         batch.end();
@@ -327,23 +200,14 @@ public class GameScreen implements Screen {
 
     public void update() {
 
-        if(touching) {
-            if(!played) {
-                played = true;
-                Application.data.putBoolean("played", true);
-                Application.data.flush();
-            }
-            player.moveBy(player.xSpeed, 0);
+        if (ui.isTouching()) {
+            player.moveBy(player.getPlayerMovement().getCurrentSpeedX(), 0);
         }
 
-        if (start && Application.currentState != GameState.APPLICATION_PAUSE) {
-            distance += (speed / 250.0f);
+        if (start && !ui.isOnPause()) {
 
-            if ((int) distance % 5 == 0 && (int)distance <= 200) {
-                speed *= 1.002f;
-            } else if((int) distance % 5 == 0) {
-                speed *= 1.00012f;
-            }
+            stage.update(player.getPlayerMovement().getSpeedY());
+
         }
     }
 
@@ -354,31 +218,27 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        if(!onPause) {
-            pauseGame();
+        if (!ui.isOnPause()) {
+            pauseGame(!ui.isOnPause());
         }
         music.pause();
-        Application.currentState = GameState.APPLICATION_PAUSE;
+        WayToHeaven.currentState = GameState.APPLICATION_PAUSE;
 
     }
 
     @Override
     public void resume() {
-        if(!MenuScreen.sound_off && !onPause) music.play();
-        Application.currentState = GameState.GAME;
+        if (!MenuScreen.sound_off && !ui.isOnPause()) music.play();
+        WayToHeaven.currentState = GameState.GAME;
 
     }
 
     @Override
     public void hide() {
         start = false;
-        distance = 0;
-        speed = 0;
-        tempSpeed = 0;
         stage.clear();
-        if(enemySpawn != null) enemySpawn.stopThread();
+        if (enemySpawn != null) enemySpawn.stopThread();
         alpha = 0.01f;
-        onPause = false;
 
         music.setVolume(0);
         music.pause();
@@ -392,38 +252,29 @@ public class GameScreen implements Screen {
         enemySpawn.stopThread();
         music.dispose();
         stage.dispose();
-        pause_skin.dispose();
+        ui.dispose();
     }
 
-    private void pauseGame() {
+    public void pauseGame(boolean onPause) {
         if (!onPause) {
-            if(enemySpawn != null) {
+            if (enemySpawn != null) {
                 enemySpawn.onPause();
                 music.pause();
             }
 
-            toGame.setDisabled(true);
-
-            tempSpeed = speed;
-
-            speed = 0;
-
-            stage.addActor(toGame);
-
-            onPause = true;
-
         } else {
-            if(enemySpawn != null) {
+            if (enemySpawn != null) {
                 enemySpawn.onResume();
-                if(!MenuScreen.sound_off) music.play();
+                if (!MenuScreen.sound_off) music.play();
             }
-            speed = tempSpeed;
-
-            toGame.remove();
-
-            onPause = false;
-
         }
     }
 
+    public GameStage getStage() {
+        return stage;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
 }

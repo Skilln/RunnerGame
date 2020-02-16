@@ -41,12 +41,15 @@ public class Coin extends GameObject {
 
         sprite.draw(batch, parentAlpha);
 
-        moveBy(0, -GameScreen.speed);
-
     }
 
     @Override
     public Circle getHitBox() {
         return new Circle(getX()+getWidth()/2, getY()+getHeight()/2, getWidth()/2);
+    }
+
+    @Override
+    public void update(float worldSpeed) {
+        moveBy(0, -worldSpeed);
     }
 }

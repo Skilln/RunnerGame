@@ -1,9 +1,8 @@
 package com.skilln.game.screen;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.skilln.game.Application;
+import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameState;
 
 import java.util.HashMap;
@@ -35,7 +34,7 @@ public class ScreenManager {
 
     public static void setScreen(GameState state) {
         game.setScreen(screens.get(state));
-        Application.currentState = state;
+        WayToHeaven.currentState = state;
     }
 
     public static Screen getCurrentScreen() {

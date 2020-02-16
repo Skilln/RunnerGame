@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.skilln.game.Application;
+import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 
@@ -51,10 +51,10 @@ public class GameOverScreen implements Screen {
     @Override
     public void show() {
 
-        camera = new OrthographicCamera(Application.width, Application.height);
+        camera = new OrthographicCamera(WayToHeaven.width, WayToHeaven.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
-        FitViewport viewport = new FitViewport(Application.width, Application.height, camera);
+        FitViewport viewport = new FitViewport(WayToHeaven.width, WayToHeaven.height, camera);
 
         batch = new SpriteBatch();
 
@@ -90,11 +90,11 @@ public class GameOverScreen implements Screen {
         toMenuButton.setWidth(400);
         toMenuButton.setHeight(100);
 
-        restartButton.setX(Application.width/2f-restartButton.getWidth()/2);
-        restartButton.setY(Application.height/2f-restartButton.getHeight()/2-100);
+        restartButton.setX(WayToHeaven.width/2f-restartButton.getWidth()/2);
+        restartButton.setY(WayToHeaven.height/2f-restartButton.getHeight()/2-100);
 
-        toMenuButton.setX(Application.width/2f-toMenuButton.getWidth()/2);
-        toMenuButton.setY(Application.height/2f-toMenuButton.getHeight()/2-250);
+        toMenuButton.setX(WayToHeaven.width/2f-toMenuButton.getWidth()/2);
+        toMenuButton.setY(WayToHeaven.height/2f-toMenuButton.getHeight()/2-250);
 
 
         restartButton.addListener(new ChangeListener() {
@@ -122,7 +122,7 @@ public class GameOverScreen implements Screen {
             sprite = GameAtlas.text_1;
         }
 
-        sprite.setY(Application.height/2);
+        sprite.setY(WayToHeaven.height/2);
 
         stage.addListener(new ClickListener() {
             @Override
@@ -138,8 +138,8 @@ public class GameOverScreen implements Screen {
 
         back = GameAtlas.background_1;
 
-        if(Application.adHandler != null) {
-            Application.adHandler.showAd();
+        if(WayToHeaven.adHandler != null) {
+            WayToHeaven.adHandler.showAd();
         }
 
         music = GameAtlas.gameOverSound;
@@ -162,7 +162,7 @@ public class GameOverScreen implements Screen {
 
         batch.draw(back, 0, 0);
 
-        batch.draw(over.getKeyFrame(a), -(Application.widthFixed-Application.width)/2f, 0, Application.widthFixed, Application.height);
+        batch.draw(over.getKeyFrame(a), -(WayToHeaven.widthFixed- WayToHeaven.width)/2f, 0, WayToHeaven.widthFixed, WayToHeaven.height);
 
         sprite.draw(batch, alpha);
 

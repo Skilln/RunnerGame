@@ -56,7 +56,7 @@ public class GameAtlas {
 
     public static void init() {
 
-        loadSkin(Application.data.getInteger("selected"));
+        loadSkin(WayToHeaven.data.getInteger("selected"));
 
         logo = new TextureAtlas("sprites/logo/logo.atlas");
         menu = new TextureAtlas("menu.atlas");
@@ -99,7 +99,7 @@ public class GameAtlas {
 
         tutorial = new Sprite(new Texture(("tutorial.png")));
 
-        menuSound = Gdx.audio.newMusic(Gdx.files.internal("audio/menu.mp3"));
+        menuSound = Gdx.audio.newMusic(Gdx.files.internal("audio/d_song.mp3"));
         gameOverSound = Gdx.audio.newMusic(Gdx.files.internal("audio/gameover.mp3"));
         gameSound = Gdx.audio.newMusic(Gdx.files.internal("audio/game.mp3"));
 

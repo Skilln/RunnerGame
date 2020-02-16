@@ -21,6 +21,7 @@ public abstract class GameObject extends Actor {
     protected boolean dead = false;
 
     public abstract Circle getHitBox();
+    public abstract void update(float worldSpeed);
 
     public GameObject(GameId id) {
         this.id = id;

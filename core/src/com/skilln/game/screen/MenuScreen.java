@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.skilln.game.Application;
+import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
 
@@ -48,10 +48,10 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        camera = new OrthographicCamera(Application.width, Application.height);
+        camera = new OrthographicCamera(WayToHeaven.width, WayToHeaven.height);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
-        FitViewport viewport = new FitViewport(Application.width, Application.height, camera);
+        FitViewport viewport = new FitViewport(WayToHeaven.width, WayToHeaven.height, camera);
 
         batch = new SpriteBatch();
 
@@ -59,10 +59,9 @@ public class MenuScreen implements Screen {
         info_skin = new Skin(GameAtlas.info_button);
         shop_skin = new Skin(GameAtlas.shop);
 
-        sound_off = Application.music.getBoolean("sound");
+        sound_off = WayToHeaven.music.getBoolean("sound");
 
         ImageButton.ImageButtonStyle sound_style = new ImageButton.ImageButtonStyle();
-
 
         if(!sound_off) {
             sound_style.up = sound_skin.getDrawable("sound_on");
@@ -95,8 +94,8 @@ public class MenuScreen implements Screen {
 
         startgame = new Button(buttonStyle);
 
-        startgame.setWidth(Application.width-200);
-        startgame.setHeight(Application.height-200);
+        startgame.setWidth(WayToHeaven.width-200);
+        startgame.setHeight(WayToHeaven.height-200);
 
         startgame.setX(100);
         startgame.setY(100);
@@ -104,7 +103,7 @@ public class MenuScreen implements Screen {
         startgame.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-               if(Application.currentState == GameState.MENU)
+               if(WayToHeaven.currentState == GameState.MENU)
                 ScreenManager.setScreen(GameState.GAME);
                  music.setVolume(0);
                  music.pause();
@@ -119,8 +118,8 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if(!sound_off) {
-                    Application.music.putBoolean("sound", true);
-                    Application.music.flush();
+                    WayToHeaven.music.putBoolean("sound", true);
+                    WayToHeaven.music.flush();
                     sound_off = true;
                     if(sound.isChecked()) {
                         sound.setChecked(true);
@@ -128,8 +127,8 @@ public class MenuScreen implements Screen {
 
                     music.stop();
                 } else {
-                    Application.music.putBoolean("sound", false);
-                    Application.music.flush();
+                    WayToHeaven.music.putBoolean("sound", false);
+                    WayToHeaven.music.flush();
                     sound_off = false;
 
                     if(sound.isChecked()) {
@@ -170,14 +169,14 @@ public class MenuScreen implements Screen {
         shop.setWidth(100);
         shop.setHeight(100);
 
-        sound.setX(Application.width-sound.getWidth());
-        sound.setY(Application.height-sound.getHeight());
+        sound.setX(WayToHeaven.width-sound.getWidth());
+        sound.setY(WayToHeaven.height-sound.getHeight());
 
         info.setX(0);
-        info.setY(Application.height-info.getHeight());
+        info.setY(WayToHeaven.height-info.getHeight());
 
         shop.setX(100);
-        shop.setY(Application.height-shop.getHeight());
+        shop.setY(WayToHeaven.height-shop.getHeight());
 
         menu = new Animation<TextureRegion>(1f/9f, GameAtlas.menu.getRegions(), Animation.PlayMode.LOOP);
 
@@ -187,7 +186,7 @@ public class MenuScreen implements Screen {
 
         sprite = GameAtlas.text_2;
 
-        sprite.setY(Application.height/2f-230);
+        sprite.setY(WayToHeaven.height/2f-230);
 
         stage.addListener(new ClickListener() {
             public boolean keyDown(InputEvent event, int keycode) {
@@ -211,7 +210,7 @@ public class MenuScreen implements Screen {
             stage.addActor(shop);
         }
 
-        Application.currentState = GameState.MENU;
+        WayToHeaven.currentState = GameState.MENU;
 
         music.setLooping(true);
 
@@ -225,15 +224,13 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         camera.update();
 
         a += delta;
 
-
         batch.begin();
 
-        batch.draw(menu.getKeyFrame(a), -(Application.widthFixed-Application.width)/2f, 0, Application.widthFixed, Application.height);
+        batch.draw(menu.getKeyFrame(a), -(WayToHeaven.widthFixed- WayToHeaven.width)/2f, 0, WayToHeaven.widthFixed, WayToHeaven.height);
 
         sprite.draw(batch, alpha);
 

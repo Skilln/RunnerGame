@@ -2,19 +2,13 @@ package com.skilln.game;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
-import com.skilln.game.Application;
 
 public class AndroidLauncher extends AndroidApplication implements AdHandler {
 
@@ -26,16 +20,16 @@ public class AndroidLauncher extends AndroidApplication implements AdHandler {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		MobileAds.initialize(this, "ca-app-pub-9869688794553717~8194525926");
+		MobileAds.initialize(this, "-your id-");
 
 		ad = new InterstitialAd(this);
-		ad.setAdUnitId("ca-app-pub-9869688794553717/3612715251");
+		ad.setAdUnitId("-your id-");
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
 		config.useImmersiveMode = true;
 
-		initialize(new Application(this), config);
+		initialize(new WayToHeaven(this), config);
 
 
 		}
