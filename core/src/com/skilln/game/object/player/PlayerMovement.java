@@ -2,6 +2,7 @@ package com.skilln.game.object.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.skilln.game.GameConfig;
 
 public class PlayerMovement {
 
@@ -11,8 +12,8 @@ public class PlayerMovement {
     private float currentSpeedX = 0;
     private float speedY = 5;
 
-    private float ySpeedMultiplier = 1.35f;
-    private float xSpeedMultiplier = 1.1f;
+    private float ySpeedMultiplier = GameConfig.GAME_SPEED_MULTIPLIER;
+    private float xSpeedMultiplier = 1.05f;
     private float speedMultiplierPoint = 250;
 
     private long lastTimeUpdate;

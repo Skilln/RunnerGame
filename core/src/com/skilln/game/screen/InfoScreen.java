@@ -12,9 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.skilln.game.GameConfig;
 import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
+import com.skilln.game.screen.ui.ViewportScaler;
 
 public class InfoScreen implements Screen {
 
@@ -28,17 +30,29 @@ public class InfoScreen implements Screen {
 
     private Button back;
 
+
+    public InfoScreen() {
+        init();
+    }
+
     @Override
     public void show() {
 
-        camera = new OrthographicCamera(WayToHeaven.width, WayToHeaven.height);
+        WayToHeaven.currentState = GameState.INFO;
+
+        Gdx.input.setInputProcessor(stage);
+
+    }
+
+    private void init() {
+        camera = new OrthographicCamera(GameConfig.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
-        FitViewport viewport = new FitViewport(WayToHeaven.width, WayToHeaven.height, camera);
+        FitViewport viewport = new FitViewport(GameConfig.GAME_WIDTH, ViewportScaler.GAME_HEIGHT, camera);
 
         batch = new SpriteBatch();
 
-        menu = new Animation<TextureRegion>(1f/9f, GameAtlas.info.getRegions(), Animation.PlayMode.LOOP);
+        menu = new Animation<TextureRegion>(1f / 9f, GameAtlas.info.getRegions(), Animation.PlayMode.LOOP);
 
         stage = new Stage(viewport, batch);
 
@@ -46,8 +60,8 @@ public class InfoScreen implements Screen {
 
         back = new Button(buttonStyle);
 
-        back.setWidth(WayToHeaven.width-200);
-        back.setHeight(WayToHeaven.height-200);
+        back.setWidth(ViewportScaler.GAME_WIDTH - 200);
+        back.setHeight(ViewportScaler.GAME_HEIGHT - 200);
 
         back.setX(100);
         back.setY(100);
@@ -67,19 +81,13 @@ public class InfoScreen implements Screen {
         stage.addListener(new ClickListener() {
             public boolean keyDown(InputEvent event, int keycode) {
 
-                if(keycode == Input.Keys.BACK) {
+                if (keycode == Input.Keys.BACK) {
                     ScreenManager.setScreen(GameState.MENU);
                 }
 
                 return super.keyDown(event, keycode);
             }
         });
-
-        WayToHeaven.currentState = GameState.INFO;
-
-
-        Gdx.input.setInputProcessor(stage);
-
     }
 
     float a = 0;
@@ -92,14 +100,14 @@ public class InfoScreen implements Screen {
 
         batch.begin();
 
-        batch.draw(menu.getKeyFrame(a), -(WayToHeaven.widthFixed- WayToHeaven.width)/2f, 0, WayToHeaven.widthFixed, WayToHeaven.height);
+        batch.draw(menu.getKeyFrame(a), -(ViewportScaler.DELTA_GAME_WIDTH) / 2f, 0, ViewportScaler.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
 
         batch.end();
 
         stage.draw();
 
-        if(Gdx.input.justTouched()) {
-      //      ScreenManager.setScreen(GameState.MENU);
+        if (Gdx.input.justTouched()) {
+            //      ScreenManager.setScreen(GameState.MENU);
         }
 
     }

@@ -15,6 +15,7 @@ import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.screen.GameScreen;
 import com.skilln.game.screen.MenuScreen;
+import com.skilln.game.screen.ui.ViewportScaler;
 
 public class GameStage extends Stage {
 
@@ -25,7 +26,6 @@ public class GameStage extends Stage {
     private ShapeRenderer shapeRenderer;
 
     private Animation<TextureRegion> rain;
-
 
     public GameStage(Viewport viewport, SpriteBatch batch) {
         super(viewport, batch);
@@ -78,14 +78,12 @@ public class GameStage extends Stage {
                 shapeRenderer.circle(object.getHitBox().x, object.getHitBox().y, object.getHitBox().radius);
 
                 shapeRenderer.end();
-
-
             }
         }
 
         a += Gdx.graphics.getDeltaTime();
 
-        batch.draw(rain.getKeyFrame(a), 0, 0, WayToHeaven.widthFixed, WayToHeaven.height);
+        batch.draw(rain.getKeyFrame(a), 0, 0, ViewportScaler.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
 
         batch.end();
 
@@ -126,7 +124,9 @@ public class GameStage extends Stage {
                 removeObject(object);
             }
         }
+    }
 
-
+    public Array<GameObject> getGameObjects() {
+        return actors;
     }
 }

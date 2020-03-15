@@ -16,6 +16,7 @@ import com.skilln.game.object.GameObject;
 import com.skilln.game.screen.GameScreen;
 import com.skilln.game.screen.MenuScreen;
 import com.skilln.game.screen.ScreenManager;
+import com.skilln.game.screen.ui.ViewportScaler;
 
 public class Player extends GameObject {
 
@@ -33,21 +34,21 @@ public class Player extends GameObject {
         TextureAtlas animation_up_atlas = GameAtlas.soul;
         TextureAtlas animation_left_atlas = GameAtlas.soul_left;
         TextureAtlas animation_right_atlas = GameAtlas.soul_right;
-        TextureAtlas animation_die_atlas =GameAtlas.soul_die;
+        TextureAtlas animation_die_atlas = GameAtlas.soul_die;
 
-        animation_up = new Animation<TextureRegion>(1f/(float)(animation_up_atlas.getRegions().size+4),
+        animation_up = new Animation<TextureRegion>(1f / (float) (animation_up_atlas.getRegions().size + 4),
                 animation_up_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        animation_left = new Animation<TextureRegion>(1f/ (float)(animation_up_atlas.getRegions().size+4),
+        animation_left = new Animation<TextureRegion>(1f / (float) (animation_up_atlas.getRegions().size + 4),
                 animation_left_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        animation_right = new Animation<TextureRegion>(1f/ (float)(animation_up_atlas.getRegions().size+4),
+        animation_right = new Animation<TextureRegion>(1f / (float) (animation_up_atlas.getRegions().size + 4),
                 animation_right_atlas.getRegions(),
                 Animation.PlayMode.LOOP);
 
-        animation_die = new Animation<TextureRegion>(1f/(float)(animation_up_atlas.getRegions().size+4),
+        animation_die = new Animation<TextureRegion>(1f / (float) (animation_up_atlas.getRegions().size + 4),
                 animation_die_atlas.getRegions(),
                 Animation.PlayMode.NORMAL);
 
@@ -60,7 +61,7 @@ public class Player extends GameObject {
 
     @Override
     public Circle getHitBox() {
-        return new Circle(getX()+getWidth()/2, getY()+getHeight()-60, getWidth()/2-25);
+        return new Circle(getX() + getWidth() / 2, getY() + getHeight() - 60, getWidth() / 2 - 25);
     }
 
     @Override
@@ -80,17 +81,17 @@ public class Player extends GameObject {
 
         TextureRegion region = animation_up.getKeyFrame(stateTime, true);
 
-        if(playerMovement.getCurrentSpeedX() < 0) {
+        if (playerMovement.getCurrentSpeedX() < 0) {
             region = animation_left.getKeyFrame(stateTime, true);
-        } else if(playerMovement.getCurrentSpeedX() > 0) {
+        } else if (playerMovement.getCurrentSpeedX() > 0) {
             region = animation_right.getKeyFrame(stateTime, true);
         }
 
-        if(dead) {
-            if(dieTime == 0) {
+        if (dead) {
+            if (dieTime == 0) {
 
-              if(!MenuScreen.sound_off)  sound.play();
-              dieTime = stateTime;
+                if (!MenuScreen.sound_off) sound.play();
+                dieTime = stateTime;
             }
 
             playerMovement.setCurrentSpeedX(0);
@@ -98,18 +99,18 @@ public class Player extends GameObject {
 
             region = animation_die.getKeyFrame(stateTime - dieTime, false);
 
-            if(animation_die.isAnimationFinished(stateTime - dieTime)) {
+            if (animation_die.isAnimationFinished(stateTime - dieTime)) {
 
                 int rec = WayToHeaven.data.getInteger("record");
 
-                if((int)playerMovement.getDistance() > rec) {
+                if ((int) playerMovement.getDistance() > rec) {
 
-                    WayToHeaven.data.putInteger("record", (int)playerMovement.getDistance());
+                    WayToHeaven.data.putInteger("record", (int) playerMovement.getDistance());
                     WayToHeaven.data.flush();
 
                 }
 
-               ScreenManager.setScreen(GameState.GAMEOVER);
+                ScreenManager.setScreen(GameState.GAMEOVER);
             }
         }
 
@@ -124,10 +125,11 @@ public class Player extends GameObject {
         super.moveBy(x, y);
 
 
-        if(getX() < 0) setX(0);
-        if(getX() > WayToHeaven.width-getWidth())  setX(WayToHeaven.width-getWidth());
+        if (getX() < 0) setX(0);
+        if (getX() > ViewportScaler.GAME_WIDTH - getWidth())
+            setX(ViewportScaler.GAME_WIDTH - getWidth());
 
-        setX(getX()+ x);
+        setX(getX() + x);
 
     }
 

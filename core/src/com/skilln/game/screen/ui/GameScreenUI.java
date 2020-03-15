@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.skilln.game.GameAtlas;
+import com.skilln.game.GameConfig;
 import com.skilln.game.GameState;
 import com.skilln.game.WayToHeaven;
 import com.skilln.game.object.player.Player;
@@ -53,8 +54,8 @@ public class GameScreenUI {
         pause.setWidth(100);
         pause.setHeight(100);
 
-        pause.setX(WayToHeaven.width - pause.getWidth());
-        pause.setY(WayToHeaven.height - pause.getHeight());
+        pause.setX(GameConfig.GAME_WIDTH - pause.getWidth());
+        pause.setY(ViewportScaler.GAME_HEIGHT - pause.getHeight());
 
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
@@ -62,11 +63,50 @@ public class GameScreenUI {
         right = new Button(buttonStyle);
         toGame = new Button(buttonStyle);
 
-        left.setWidth(WayToHeaven.width / 2f);
-        left.setHeight(WayToHeaven.height - 100);
+        left.setWidth(GameConfig.GAME_WIDTH / 2f);
+        left.setHeight(ViewportScaler.GAME_HEIGHT - 100);
 
         left.setX(0);
         left.setY(0);
+
+        //PC DEBUG
+        stage.addListener(new ClickListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+
+                if (keycode == Input.Keys.D) {
+                    if (!player.isDead()) {
+
+                        player.getPlayerMovement().setCurrentSpeedX(1);
+
+                        touching = true;
+                    }
+                } else if (keycode == Input.Keys.A) {
+                    if (!player.isDead()) {
+
+                        player.getPlayerMovement().setCurrentSpeedX(-1);
+
+                        touching = true;
+                    }
+                }
+
+                return super.keyDown(event, keycode);
+            }
+
+            @Override
+            public boolean keyUp(InputEvent event, int keycode) {
+
+                if (keycode == Input.Keys.D) {
+                    player.getPlayerMovement().setCurrentSpeedX(0);
+
+                } else if (keycode == Input.Keys.A) {
+                    player.getPlayerMovement().setCurrentSpeedX(0);
+                }
+
+                return super.keyUp(event, keycode);
+            }
+        });
+        //
 
         left.addListener(new ClickListener() {
             @Override
@@ -92,8 +132,8 @@ public class GameScreenUI {
             }
         });
 
-        right.setWidth(WayToHeaven.width / 2f);
-        right.setHeight(WayToHeaven.height - 100);
+        right.setWidth(GameConfig.GAME_WIDTH / 2f);
+        right.setHeight(ViewportScaler.GAME_HEIGHT - 100);
 
         right.addListener(new ClickListener() {
             @Override
@@ -116,11 +156,11 @@ public class GameScreenUI {
             }
         });
 
-        right.setX(WayToHeaven.width / 2f);
+        right.setX(ViewportScaler.GAME_WIDTH / 2f);
         right.setY(0);
 
-        toGame.setWidth(WayToHeaven.width);
-        toGame.setHeight(WayToHeaven.height - pause.getHeight());
+        toGame.setWidth(GameConfig.GAME_WIDTH);
+        toGame.setHeight(ViewportScaler.GAME_HEIGHT - pause.getHeight());
 
         pause.addListener(new ClickListener() {
             @Override

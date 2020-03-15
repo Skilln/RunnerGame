@@ -1,4 +1,4 @@
-package com.skilln.game.object;
+package com.skilln.game.object.coins;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.skilln.game.GameAtlas;
+import com.skilln.game.object.GameId;
+import com.skilln.game.object.GameObject;
 import com.skilln.game.screen.GameScreen;
 
 public class Coin extends GameObject {

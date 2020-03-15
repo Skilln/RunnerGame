@@ -18,9 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.skilln.game.GameConfig;
 import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
+import com.skilln.game.screen.ui.ViewportScaler;
 
 public class ShopScreen implements Screen {
 
@@ -47,19 +49,25 @@ public class ShopScreen implements Screen {
     private int[] price = {0, 100, 500, 1000};
     private String[] keys = {"soul", "first_soul", "hollow_soul", "alpha_soul"};
 
+    public ShopScreen() {
+        init();
+    }
+
     @Override
     public void show() {
 
-        camera = new OrthographicCamera(WayToHeaven.width, WayToHeaven.height);
+        Gdx.input.setInputProcessor(stage);
+    }
+
+    private void init() {
+        camera = new OrthographicCamera(GameConfig.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
-        FitViewport viewport = new FitViewport(WayToHeaven.width, WayToHeaven.height, camera);
+        FitViewport viewport = new FitViewport(GameConfig.GAME_WIDTH, ViewportScaler.GAME_HEIGHT, camera);
 
         batch = new SpriteBatch();
 
         stage = new Stage(viewport, batch);
-
-        Gdx.input.setInputProcessor(stage);
 
         back = GameAtlas.background_1;
 
@@ -85,8 +93,8 @@ public class ShopScreen implements Screen {
         toMenuButton.setWidth(400);
         toMenuButton.setHeight(100);
 
-        toMenuButton.setX(WayToHeaven.width/2f-toMenuButton.getWidth()/2);
-        toMenuButton.setY(WayToHeaven.height/2f-toMenuButton.getHeight()/2-450);
+        toMenuButton.setX(GameConfig.GAME_WIDTH / 2f - toMenuButton.getWidth() / 2);
+        toMenuButton.setY(ViewportScaler.GAME_HEIGHT / 2f - toMenuButton.getHeight() / 2 - 450);
 
         toMenuButton.addListener(new ChangeListener() {
             @Override
@@ -97,7 +105,7 @@ public class ShopScreen implements Screen {
 
         int coins = WayToHeaven.data.getInteger("coins");
 
-        if(coins == Integer.MIN_VALUE) {
+        if (coins == Integer.MIN_VALUE) {
             this.coins = 0;
         } else {
             this.coins = coins;
@@ -106,7 +114,7 @@ public class ShopScreen implements Screen {
         stage.addListener(new ClickListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if(keycode == Input.Keys.BACK) {
+                if (keycode == Input.Keys.BACK) {
                     ScreenManager.setScreen(GameState.MENU);
                 }
 
@@ -119,20 +127,20 @@ public class ShopScreen implements Screen {
         stage.addActor(shopImageButton[1]);
         stage.addActor(shopImageButton[2]);
         stage.addActor(shopImageButton[3]);
-    }
 
+    }
 
 
     @Override
     public void render(float delta) {
         batch.begin();
 
-        batch.draw(back, -(WayToHeaven.widthFixed- WayToHeaven.width)/2f, 0, WayToHeaven.widthFixed, WayToHeaven.height);
+        batch.draw(back, -(ViewportScaler.DELTA_GAME_WIDTH) / 2f, 0, ViewportScaler.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
 
         String st = "coins : " + coins;
 
-        font.draw(batch, st, WayToHeaven.width/2f-((st.length()/2f)*20), WayToHeaven.height/2f+400);
-        label.draw(batch, "HEAVEN SHOP", 200, WayToHeaven.height/2f+500);
+        font.draw(batch, st, ViewportScaler.GAME_WIDTH / 2f - ((st.length() / 2f) * 20), ViewportScaler.GAME_HEIGHT / 2f + 400);
+        label.draw(batch, "HEAVEN SHOP", 200, ViewportScaler.GAME_HEIGHT / 2f + 500);
 
         batch.end();
 
@@ -156,7 +164,7 @@ public class ShopScreen implements Screen {
 
     @Override
     public void hide() {
-        toMenuButton.remove();
+
     }
 
     @Override
@@ -190,22 +198,22 @@ public class ShopScreen implements Screen {
         sold[2] = WayToHeaven.data.getBoolean("hollow_soul");
         sold[3] = WayToHeaven.data.getBoolean("alpha_soul");
 
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
 
             ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 
-            if(sold[i]) {
-               style.checked = sold_soul[i].getDrawable("check");
-               style.up = sold_soul[i].getDrawable("up");
+            if (sold[i]) {
+                style.checked = sold_soul[i].getDrawable("check");
+                style.up = sold_soul[i].getDrawable("up");
 
             } else {
-                style.up = soul[i-1].getDrawable("up");
-                style.down = soul[i-1].getDrawable("down");
+                style.up = soul[i - 1].getDrawable("up");
+                style.down = soul[i - 1].getDrawable("down");
             }
 
             shopImageButton[i] = new ImageButton(style);
 
-            if(selected == i) {
+            if (selected == i) {
                 shopImageButton[i].setChecked(true);
             }
 
@@ -218,15 +226,15 @@ public class ShopScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                    if(!sold[index]) {
-                        if(coins >= price[index]) {
+                    if (!sold[index]) {
+                        if (coins >= price[index]) {
                             sold[index] = true;
 
                             WayToHeaven.data.putBoolean(keys[index], true);
-                            WayToHeaven.data.putInteger("coins", coins-price[index]);
+                            WayToHeaven.data.putInteger("coins", coins - price[index]);
                             WayToHeaven.data.flush();
 
-                            coins -=price[index];
+                            coins -= price[index];
 
                             ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
 
@@ -244,8 +252,8 @@ public class ShopScreen implements Screen {
 
                             Gdx.app.log("SHOP", "Not enough heaven coins to purchase");
 
-                            if(WayToHeaven.adHandler != null) {
-                                 WayToHeaven.adHandler.toast("Not enough heaven coins to purchase!");
+                            if (WayToHeaven.adHandler != null) {
+                                WayToHeaven.adHandler.toast("Not enough heaven coins to purchase!");
                             }
                         }
                     } else {
@@ -267,19 +275,22 @@ public class ShopScreen implements Screen {
             });
 
 
-
         }
 
-        shopImageButton[0].setX(60); shopImageButton[0].setY(WayToHeaven.height/2);
-        shopImageButton[1].setX(360); shopImageButton[1].setY(WayToHeaven.height/2);
-        shopImageButton[2].setX(60); shopImageButton[2].setY(WayToHeaven.height/2-300);
-        shopImageButton[3].setX(360); shopImageButton[3].setY(WayToHeaven.height/2-300);
+        shopImageButton[0].setX(60);
+        shopImageButton[0].setY(ViewportScaler.GAME_HEIGHT / 2);
+        shopImageButton[1].setX(360);
+        shopImageButton[1].setY(ViewportScaler.GAME_HEIGHT / 2);
+        shopImageButton[2].setX(60);
+        shopImageButton[2].setY(ViewportScaler.GAME_HEIGHT / 2 - 300);
+        shopImageButton[3].setX(360);
+        shopImageButton[3].setY(ViewportScaler.GAME_HEIGHT / 2 - 300);
     }
 
     private void select(int index) {
-        for(int i = 0; i < 4; i++) {
-            if(i == index) {
-                if(sold[i]) shopImageButton[i].setChecked(true);
+        for (int i = 0; i < 4; i++) {
+            if (i == index) {
+                if (sold[i]) shopImageButton[i].setChecked(true);
 
                 selected = index;
 
@@ -287,7 +298,7 @@ public class ShopScreen implements Screen {
                 WayToHeaven.data.flush();
 
             } else {
-                if(sold[i]) shopImageButton[i].setChecked(false);
+                if (sold[i]) shopImageButton[i].setChecked(false);
             }
         }
     }

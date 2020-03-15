@@ -21,9 +21,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.skilln.game.GameConfig;
 import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
+import com.skilln.game.screen.ui.ViewportScaler;
 
 public class GameOverScreen implements Screen {
     private Stage stage;
@@ -51,10 +53,10 @@ public class GameOverScreen implements Screen {
     @Override
     public void show() {
 
-        camera = new OrthographicCamera(WayToHeaven.width, WayToHeaven.height);
+        camera = new OrthographicCamera(GameConfig.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
-        FitViewport viewport = new FitViewport(WayToHeaven.width, WayToHeaven.height, camera);
+        FitViewport viewport = new FitViewport(GameConfig.GAME_WIDTH, ViewportScaler.GAME_HEIGHT, camera);
 
         batch = new SpriteBatch();
 
@@ -62,7 +64,7 @@ public class GameOverScreen implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        over = new Animation<TextureRegion>(1f/20f, GameAtlas.interference.getRegions(), Animation.PlayMode.LOOP);
+        over = new Animation<TextureRegion>(1f / 20f, GameAtlas.interference.getRegions(), Animation.PlayMode.LOOP);
 
         buttonAtlas = GameAtlas.button;
 
@@ -90,11 +92,11 @@ public class GameOverScreen implements Screen {
         toMenuButton.setWidth(400);
         toMenuButton.setHeight(100);
 
-        restartButton.setX(WayToHeaven.width/2f-restartButton.getWidth()/2);
-        restartButton.setY(WayToHeaven.height/2f-restartButton.getHeight()/2-100);
+        restartButton.setX(GameConfig.GAME_WIDTH / 2f - restartButton.getWidth() / 2);
+        restartButton.setY(ViewportScaler.GAME_HEIGHT / 2f - restartButton.getHeight() / 2 - 100);
 
-        toMenuButton.setX(WayToHeaven.width/2f-toMenuButton.getWidth()/2);
-        toMenuButton.setY(WayToHeaven.height/2f-toMenuButton.getHeight()/2-250);
+        toMenuButton.setX(GameConfig.GAME_WIDTH / 2f - toMenuButton.getWidth() / 2);
+        toMenuButton.setY(ViewportScaler.GAME_HEIGHT / 2f - toMenuButton.getHeight() / 2 - 250);
 
 
         restartButton.addListener(new ChangeListener() {
@@ -116,20 +118,20 @@ public class GameOverScreen implements Screen {
 
         double a = Math.random();
 
-        if(a <= 0.5) {
+        if (a <= 0.5) {
             sprite = GameAtlas.text_0;
         } else {
             sprite = GameAtlas.text_1;
         }
 
-        sprite.setY(WayToHeaven.height/2);
+        sprite.setY(ViewportScaler.GAME_HEIGHT / 2);
 
         stage.addListener(new ClickListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                if(keycode == Input.Keys.BACK) {
-                   ScreenManager.setScreen(GameState.MENU);
+                if (keycode == Input.Keys.BACK) {
+                    ScreenManager.setScreen(GameState.MENU);
                 }
 
                 return super.keyDown(event, keycode);
@@ -138,7 +140,7 @@ public class GameOverScreen implements Screen {
 
         back = GameAtlas.background_1;
 
-        if(WayToHeaven.adHandler != null) {
+        if (WayToHeaven.adHandler != null) {
             WayToHeaven.adHandler.showAd();
         }
 
@@ -162,7 +164,7 @@ public class GameOverScreen implements Screen {
 
         batch.draw(back, 0, 0);
 
-        batch.draw(over.getKeyFrame(a), -(WayToHeaven.widthFixed- WayToHeaven.width)/2f, 0, WayToHeaven.widthFixed, WayToHeaven.height);
+        batch.draw(over.getKeyFrame(a), -(ViewportScaler.DELTA_GAME_WIDTH) / 2f, 0, ViewportScaler.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
 
         sprite.draw(batch, alpha);
 
@@ -170,8 +172,8 @@ public class GameOverScreen implements Screen {
 
         stage.draw();
 
-        if(alpha < 1.0) {
-            alpha*=1.03f;
+        if (alpha < 1.0) {
+            alpha *= 1.03f;
         }
 
         camera.update();
@@ -185,7 +187,7 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void pause() {
-        if(music.isPlaying()) {
+        if (music.isPlaying()) {
             music.pause();
         }
     }
