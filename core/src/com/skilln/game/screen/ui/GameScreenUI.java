@@ -129,6 +129,9 @@ public class GameScreenUI {
                 player.getPlayerMovement().setCurrentSpeedX(0);
 
                 touching = false;
+                parent.played = true;
+                WayToHeaven.data.putBoolean("played", true);
+                WayToHeaven.data.flush();
             }
         });
 
@@ -153,6 +156,9 @@ public class GameScreenUI {
                 player.getPlayerMovement().setCurrentSpeedX(0);
 
                 touching = false;
+                parent.played = true;
+                WayToHeaven.data.putBoolean("played", true);
+                WayToHeaven.data.flush();
             }
         });
 

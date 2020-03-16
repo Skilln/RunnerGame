@@ -27,22 +27,15 @@ public class CoinSpawn {
     }
 
     private void place() {
-        while(true) {
-            for(GameObject gameObject : stage.getGameObjects()) {
-                Coin coin = new Coin(GameId.Coin);
 
-                float x = (float)(Math.random() * ViewportScaler.GAME_WIDTH - coin.getWidth());
-                float y = (float)(Math.random() * 100 + ViewportScaler.GAME_HEIGHT);
+        Coin coin = new Coin(GameId.Coin);
 
-                coin.setX(x);
-                coin.setY(y);
+        float x = (float) ((Math.random() * GameConfig.GAME_WIDTH - coin.getWidth()));
+        float y = (float) (Math.random() * 100 + ViewportScaler.GAME_HEIGHT);
 
-                if (!coin.getHitBox().overlaps(gameObject.getHitBox())) {
-                    stage.addObject(coin);
-                    return;
-                }
-            }
-        }
+        coin.setX(x);
+        coin.setY(y);
+
     }
 
     public void updatePeriod() {

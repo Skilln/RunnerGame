@@ -22,7 +22,7 @@ public class EnemySpawn {
         if (distance > spawnPoint) {
             spawnPoint += spawnPeriod;
 
-            Array<Enemy> objects = EnemySpawnPoint.createSpawnPoint(random.nextInt(7)).getEnemies();
+            Array<Enemy> objects = EnemySpawnPoint.createSpawnPoint(random.nextInt(50)).getEnemies();
 
             for (int i = 0; i < objects.size; i++) {
                 stage.addObject(objects.get(i));

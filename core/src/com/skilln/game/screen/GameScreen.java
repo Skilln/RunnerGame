@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
     public static int record = 0;
     public static int coins = 0;
 
-    private boolean played;
+    public boolean played;
 
     private boolean scale = false;
 
@@ -87,12 +87,12 @@ public class GameScreen implements Screen {
         Pixmap tutorialTipLeft = new Pixmap(ViewportScaler.GAME_WIDTH, ViewportScaler.GAME_HEIGHT, Pixmap.Format.RGBA8888);
 
         tutorialTipLeft.setColor(new Color(252, 186, 3, 0.5f));
-        tutorialTipLeft.fillRectangle(20, 20, ViewportScaler.GAME_WIDTH / 2 - 30, ViewportScaler.GAME_HEIGHT - 20);
+        tutorialTipLeft.fillRectangle(20, 20, GameConfig.GAME_WIDTH / 2 - 30, ViewportScaler.GAME_HEIGHT - 20);
 
-        Pixmap tutorialTipRight = new Pixmap(ViewportScaler.GAME_WIDTH, ViewportScaler.GAME_HEIGHT, Pixmap.Format.RGBA8888);
+        Pixmap tutorialTipRight = new Pixmap(GameConfig.GAME_WIDTH, ViewportScaler.GAME_HEIGHT, Pixmap.Format.RGBA8888);
 
         tutorialTipRight.setColor(new Color(252, 186, 3, 0.5f));
-        tutorialTipRight.fillRectangle(ViewportScaler.GAME_WIDTH / 2 + 10, 20, ViewportScaler.GAME_WIDTH / 2 - 30, ViewportScaler.GAME_HEIGHT - 20);
+        tutorialTipRight.fillRectangle(GameConfig.GAME_WIDTH / 2 + 10, 20, GameConfig.GAME_WIDTH / 2 - 30, ViewportScaler.GAME_HEIGHT - 20);
 
         ////////////
 
@@ -145,12 +145,6 @@ public class GameScreen implements Screen {
         coinSpawn = new CoinSpawn(stage);
 
         Gdx.input.setInputProcessor(stage);
-//
-//        if (WayToHeaven.ratio > 1.78 && !scale) {
-//            tutorial.scale(0.2f);
-//
-//            scale = true;
-//        }
 
         music.setVolume(1f);
         music.setLooping(true);
@@ -196,8 +190,9 @@ public class GameScreen implements Screen {
                 batch.draw(tutorialTipLeft, 0, 0);
                 batch.draw(tutorialTipRight, 0, 0);
 
-                font.draw(batch, "Tap to\nRIGHT", ViewportScaler.GAME_WIDTH / 2 + 130, ViewportScaler.GAME_HEIGHT / 2);
+                font.draw(batch, "Tap to\nRIGHT", GameConfig.GAME_WIDTH / 2 + 130, ViewportScaler.GAME_HEIGHT / 2);
                 font.draw(batch, "Tap to\n LEFT", 130, ViewportScaler.GAME_HEIGHT / 2);
+
             }
 
         }

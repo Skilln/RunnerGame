@@ -120,6 +120,16 @@ public class GameStage extends Stage {
                 WayToHeaven.data.flush();
             }
 
+            if (object.getId() == GameId.Coin) {
+                for (GameObject enemy : actors) {
+                    if (enemy.getId() == GameId.Enemy) {
+                        if (object.getHitBox().overlaps(enemy.getHitBox())) {
+                            removeObject(object);
+                        }
+                    }
+                }
+            }
+
             if(object.getY() <= -700 && object.getId() != GameId.Background) {
                 removeObject(object);
             }

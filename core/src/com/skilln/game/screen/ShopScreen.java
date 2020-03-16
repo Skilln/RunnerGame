@@ -139,7 +139,7 @@ public class ShopScreen implements Screen {
 
         String st = "coins : " + coins;
 
-        font.draw(batch, st, ViewportScaler.GAME_WIDTH / 2f - ((st.length() / 2f) * 20), ViewportScaler.GAME_HEIGHT / 2f + 400);
+        font.draw(batch, st, GameConfig.GAME_WIDTH / 2f - ((st.length() / 2f) * 20), ViewportScaler.GAME_HEIGHT / 2f + 400);
         label.draw(batch, "HEAVEN SHOP", 200, ViewportScaler.GAME_HEIGHT / 2f + 500);
 
         batch.end();

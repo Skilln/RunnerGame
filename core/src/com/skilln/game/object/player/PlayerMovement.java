@@ -31,8 +31,6 @@ public class PlayerMovement {
         if (TimeUtils.millis() - lastTimeUpdate > PERIOD_OF_DISTANCE_UPDATE) {
             distance += speedY;
             lastTimeUpdate = TimeUtils.millis();
-
-            Gdx.app.log("PlayerMovement", "Distance: " + (distance / POINTS_IN_METER) + " speed: " + speedY);
         }
 
         if (distance >= speedMultiplierPoint) {

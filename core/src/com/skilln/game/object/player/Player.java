@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
+import com.skilln.game.GameConfig;
 import com.skilln.game.WayToHeaven;
 import com.skilln.game.GameAtlas;
 import com.skilln.game.GameState;
@@ -127,7 +128,7 @@ public class Player extends GameObject {
 
         if (getX() < 0) setX(0);
         if (getX() > ViewportScaler.GAME_WIDTH - getWidth())
-            setX(ViewportScaler.GAME_WIDTH - getWidth());
+            setX(GameConfig.GAME_WIDTH - getWidth());
 
         setX(getX() + x);
 
