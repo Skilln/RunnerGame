@@ -127,7 +127,7 @@ public class Player extends GameObject {
 
 
         if (getX() < 0) setX(0);
-        if (getX() > ViewportScaler.GAME_WIDTH - getWidth())
+        if (getX() > GameConfig.GAME_WIDTH - getWidth())
             setX(GameConfig.GAME_WIDTH - getWidth());
 
         setX(getX() + x);

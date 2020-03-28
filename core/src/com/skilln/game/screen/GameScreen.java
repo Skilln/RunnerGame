@@ -63,11 +63,15 @@ public class GameScreen implements Screen {
 
     private boolean scale = false;
 
+    private boolean isMusicOn = true;
+
     @Override
     public void show() {
         batch = new SpriteBatch();
 
         played = WayToHeaven.data.getBoolean("played");
+
+        isMusicOn = WayToHeaven.music.getBoolean("sound");
 
         camera = new OrthographicCamera(GameConfig.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
@@ -168,6 +172,7 @@ public class GameScreen implements Screen {
 
         } else if (!start && !playerInPoint) {
             start = true;
+            if (isMusicOn) music.play();
         }
 
         stage.draw();
@@ -239,6 +244,7 @@ public class GameScreen implements Screen {
         if (!ui.isOnPause()) {
             ui.pauseGame();
         }
+
         music.pause();
         WayToHeaven.currentState = GameState.APPLICATION_PAUSE;
 
@@ -246,7 +252,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resume() {
-        if (!MenuScreen.sound_off && !ui.isOnPause()) music.play();
+        if (isMusicOn && !ui.isOnPause()) music.play();
         WayToHeaven.currentState = GameState.GAME;
 
     }

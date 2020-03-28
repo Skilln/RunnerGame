@@ -36,6 +36,8 @@ public class CoinSpawn {
         coin.setX(x);
         coin.setY(y);
 
+        stage.addObject(coin);
+
     }
 
     public void updatePeriod() {

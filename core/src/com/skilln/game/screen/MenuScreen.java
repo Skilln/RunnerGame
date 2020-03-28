@@ -44,6 +44,8 @@ public class MenuScreen implements Screen {
     private Button startgame;
     private Skin sound_skin, info_skin, shop_skin;
 
+    private ImageButton.ImageButtonStyle sound_style;
+
     private Animation<TextureRegion> menu;
 
     public static boolean sound_off;
@@ -55,6 +57,42 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+        music = GameAtlas.menuSound;
+        music.setVolume(1.0f);
+
+        sound_off = WayToHeaven.music.getBoolean("sound");
+
+        switchMusic();
+
+        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setCatchBackKey(true);
+
+        WayToHeaven.currentState = GameState.MENU;
+
+        music.setLooping(true);
+
+        if (!sound_off) music.play();
+    }
+
+    private void switchMusic() {
+        if (!sound_off) {
+            WayToHeaven.music.putBoolean("sound", false);
+            WayToHeaven.music.flush();
+            sound_off = true;
+            sound.setChecked(true);
+
+            music.stop();
+        } else {
+            WayToHeaven.music.putBoolean("sound", true);
+            WayToHeaven.music.flush();
+            sound_off = false;
+            sound.setChecked(false);
+
+            music.play();
+        }
+    }
+
+    private void init() {
         camera = new OrthographicCamera(GameConfig.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
@@ -66,46 +104,20 @@ public class MenuScreen implements Screen {
         info_skin = new Skin(GameAtlas.info_button);
         shop_skin = new Skin(GameAtlas.shop);
 
+        sound_style = new ImageButton.ImageButtonStyle();
 
-        sound_off = WayToHeaven.music.getBoolean("sound");
-
-        ImageButton.ImageButtonStyle sound_style = new ImageButton.ImageButtonStyle();
-
-        if (!sound_off) {
-            sound_style.up = sound_skin.getDrawable("sound_on");
-            sound_style.checked = sound_skin.getDrawable("sound_off");
-
-        } else {
-            sound_style.up = sound_skin.getDrawable("sound_off");
-            sound_style.checked = sound_skin.getDrawable("sound_on");
-
-        }
+        sound_style.up = sound_skin.getDrawable("sound_on");
+        sound_style.checked = sound_skin.getDrawable("sound_off");
 
         sound = new ImageButton(sound_style);
 
-        sound.addListener(new ChangeListener() {
+        sound.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (!sound_off) {
-                    WayToHeaven.music.putBoolean("sound", true);
-                    WayToHeaven.music.flush();
-                    sound_off = true;
-                    if (sound.isChecked()) {
-                        sound.setChecked(true);
-                    } else sound.setChecked(false);
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
 
-                    music.stop();
-                } else {
-                    WayToHeaven.music.putBoolean("sound", false);
-                    WayToHeaven.music.flush();
-                    sound_off = false;
+                switchMusic();
 
-                    if (sound.isChecked()) {
-                        sound.setChecked(true);
-                    } else sound.setChecked(false);
-
-                    music.play();
-                }
             }
         });
 
@@ -125,9 +137,6 @@ public class MenuScreen implements Screen {
         shop_style.up = shop_skin.getDrawable("shop_0");
         shop_style.down = shop_skin.getDrawable("shop_1");
 
-        music = GameAtlas.menuSound;
-        music.setVolume(1.0f);
-
         info = new ImageButton(info_style);
         shop = new ImageButton(shop_style);
 
@@ -137,7 +146,6 @@ public class MenuScreen implements Screen {
 
         startgame.setWidth(GameConfig.GAME_WIDTH - 200);
         startgame.setHeight(ViewportScaler.GAME_HEIGHT - 200);
-
 
         startgame.setX(100);
         startgame.setY(100);
@@ -176,8 +184,6 @@ public class MenuScreen implements Screen {
             }
         });
 
-
-
         info.setWidth(100);
         info.setHeight(100);
 
@@ -211,25 +217,10 @@ public class MenuScreen implements Screen {
             }
         });
 
-        if (start) {
-            stage.addActor(startgame);
-            stage.addActor(info);
-            stage.addActor(shop);
-            stage.addActor(sound);
-        }
-
-        Gdx.input.setInputProcessor(stage);
-        Gdx.input.setCatchBackKey(true);
-
-        WayToHeaven.currentState = GameState.MENU;
-
-        music.setLooping(true);
-
-        if (!sound_off) music.play();
-    }
-
-    private void init() {
-
+        stage.addActor(startgame);
+        stage.addActor(info);
+        stage.addActor(shop);
+        stage.addActor(sound);
 
     }
 
@@ -249,15 +240,6 @@ public class MenuScreen implements Screen {
                 0, ViewportScaler.GAME_WIDTH, ViewportScaler.GAME_HEIGHT);
 
         sprite.draw(batch, alpha);
-
-        if (!start) {
-            stage.addActor(sound);
-            stage.addActor(startgame);
-            stage.addActor(info);
-            stage.addActor(shop);
-        }
-
-        start = true;
 
         batch.end();
 
